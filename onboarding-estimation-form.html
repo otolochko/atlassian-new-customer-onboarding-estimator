@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Implementation & License Estimation</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+  <style>
+    :root {
+      /* --- Atlassian Design Tokens 2024 --- */
+      --ds-surface: #FFFFFF;
+      --ds-surface-sunken: #F7F8F9;
+      --ds-background-input: #F4F5F7;
+      --ds-background-input-pressed: #FFFFFF;
+      --ds-text: #172B4D;
+      --ds-text-subtle: #626F86;
+      --ds-border: #DCDFE4;
+      --ds-border-focused: #388BFF;
+      --ds-background-brand-bold: #0C66E4;
+      --ds-background-brand-bold-hovered: #0055CC;
+      --ds-background-success-bold: #36B37E;
+      --ds-background-danger-bold: #CA3521;
+      
+      --ds-shadow-card: 0px 1px 1px rgba(9, 30, 66, 0.25), 0px 0px 1px 1px rgba(9, 30, 66, 0.13);
+      --ds-radius: 3px;
+      --sidebar-width: 320px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+      background-color: var(--ds-surface-sunken);
+      color: var(--ds-text);
+      margin: 0;
+      padding: 0;
+      line-height: 1.5;
+    }
+
+    /* --- Header --- */
+    header {
+      background: var(--ds-surface);
+      padding: 20px 40px;
+      border-bottom: 1px solid var(--ds-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .header-titles h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--ds-text);
+    }
+
+    .client-input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+    
+    .client-input-group label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--ds-text-subtle);
+    }
+
+    .client-name-input {
+      font-size: 18px;
+      padding: 4px 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      border-radius: var(--ds-radius);
+      color: var(--ds-text);
+      font-weight: 500;
+      text-align: right;
+      width: 300px;
+      transition: all 0.2s;
+    }
+    
+    .client-name-input:hover { background: var(--ds-background-input); }
+    .client-name-input:focus { 
+      background: #fff; 
+      border-color: var(--ds-border-focused); 
+      outline: none; 
+    }
+
+    /* --- Layout --- */
+    .app-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 40px 80px;
+      display: grid;
+      grid-template-columns: 1fr var(--sidebar-width);
+      gap: 32px;
+      align-items: start;
+    }
+
+    @media (max-width: 960px) {
+      .app-container { grid-template-columns: 1fr; padding: 20px; }
+      header { position: static; }
+      .header-content { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .client-input-group { align-items: flex-start; width: 100%; }
+      .client-name-input { text-align: left; width: 100%; }
+    }
+
+    /* --- Cards --- */
+    .sections-wrapper { display: flex; flex-direction: column; gap: 16px; }
+
+    .section-card {
+      background: var(--ds-surface);
+      border-radius: var(--ds-radius);
+      box-shadow: var(--ds-shadow-card);
+      transition: box-shadow 0.2s;
+      border: 1px solid transparent;
+    }
+    .section-card:hover { box-shadow: 0px 4px 8px rgba(9, 30, 66, 0.25), 0px 0px 1px rgba(9, 30, 66, 0.31); }
+
+    .section-disabled {
+      opacity: 0.6;
+      background-color: rgba(255,255,255, 0.5);
+      box-shadow: none;
+      border: 1px solid var(--ds-border);
+    }
+
+    .section-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--ds-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .section-badge {
+      background: var(--ds-text);
+      color: var(--ds-surface);
+      font-size: 12px;
+      font-weight: 700;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    .section-title { font-size: 16px; font-weight: 600; }
+    .section-body { padding: 20px 24px; }
+    .section-body-disabled { pointer-events: none; filter: grayscale(1); }
+
+    /* --- Tasks --- */
+    .tasks-list { list-style: none; padding: 0; margin: 0 0 24px 0; }
+    .task-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; font-size: 14px; }
+    .task-item.excluded { text-decoration: line-through; color: var(--ds-text-subtle); }
+
+    input[type="checkbox"] {
+      appearance: none; width: 16px; height: 16px; border: 2px solid #DFE1E6; background: #FAFBFC; border-radius: 3px; margin-top: 3px; cursor: pointer; flex-shrink: 0;
+    }
+    input[type="checkbox"]:checked { background: var(--ds-background-brand-bold); border-color: var(--ds-background-brand-bold); }
+    input[type="checkbox"]:checked::after { content: ''; position: absolute; margin: 1px 0 0 4px; width: 4px; height: 8px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+
+    /* --- License Table Styles --- */
+    .license-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+    
+    .license-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--ds-text-subtle);
+      border-bottom: 2px solid var(--ds-border);
+      padding: 8px 4px;
+    }
+    
+    .license-table td {
+      padding: 8px 4px;
+      border-bottom: 1px solid var(--ds-border);
+      vertical-align: top;
+    }
+
+    .license-input, .license-select {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid var(--ds-border);
+      background: var(--ds-background-input);
+      border-radius: 3px;
+      font-family: inherit;
+      font-size: 13px;
+    }
+    
+    .license-input:focus, .license-select:focus {
+      background: #fff;
+      border-color: var(--ds-border-focused);
+      outline: none;
+    }
+
+    .row-total-cell {
+        font-weight: 600;
+        text-align: right;
+        padding-top: 14px;
+        color: var(--ds-text);
+    }
+
+    .btn-add-row {
+      background: transparent;
+      color: var(--ds-background-brand-bold);
+      font-weight: 500;
+      padding: 0;
+      text-align: left;
+      width: auto;
+      justify-content: flex-start;
+    }
+    .btn-add-row:hover { background: transparent; text-decoration: underline; }
+
+    .btn-remove-row {
+      color: var(--ds-text-subtle);
+      background: transparent;
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      font-size: 18px;
+      line-height: 1;
+    }
+    .btn-remove-row:hover { color: var(--ds-background-danger-bold); background: transparent; }
+
+    .license-summary-box {
+      margin-top: 20px;
+      padding: 16px;
+      background: var(--ds-surface-sunken);
+      border-radius: 3px;
+    }
+    
+    .license-summary-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--ds-text-subtle); margin-bottom: 8px; }
+    .license-summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+    .license-tag { display: flex; justify-content: space-between; font-size: 13px; background: #fff; padding: 4px 8px; border-radius: 3px; border: 1px solid var(--ds-border); }
+
+    /* --- Big Textarea for Comments --- */
+    .global-comment-area {
+      width: 100%;
+      min-height: 120px;
+      padding: 12px;
+      border: 1px solid var(--ds-border);
+      background: var(--ds-background-input);
+      border-radius: var(--ds-radius);
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--ds-text);
+      resize: vertical;
+    }
+    .global-comment-area:focus {
+      background: #fff;
+      border-color: var(--ds-border-focused);
+      outline: none;
+    }
+
+    /* --- Sidebar --- */
+    aside { position: sticky; top: 110px; }
+    .summary-panel { background: var(--ds-surface); border-radius: var(--ds-radius); box-shadow: var(--ds-shadow-card); overflow: hidden; }
+    .summary-header { padding: 16px 20px; background: var(--ds-surface-sunken); border-bottom: 1px solid var(--ds-border); }
+    .summary-header h2 { margin: 0; font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--ds-text-subtle); }
+    .summary-body { padding: 24px 20px; }
+    
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 12px;
+        font-size: 14px;
+    }
+    
+    .summary-row.total {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 2px solid var(--ds-border);
+    }
+
+    .summary-label { color: var(--ds-text-subtle); }
+    .summary-value { font-weight: 600; color: var(--ds-text); }
+    
+    .cost-main { font-size: 16px; }
+    .cost-total { font-size: 20px; color: var(--ds-background-brand-bold); font-weight: 700; }
+
+    /* Buttons */
+    .actions { padding: 16px 20px; background: var(--ds-surface-sunken); border-top: 1px solid var(--ds-border); display: flex; flex-direction: column; gap: 8px; }
+    button { display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 0 12px; border-radius: 3px; border: none; font-weight: 500; font-size: 14px; cursor: pointer; transition: background 0.1s; width: 100%; }
+    button.primary { background: var(--ds-background-brand-bold); color: white; }
+    button.primary:hover { background: var(--ds-background-brand-bold-hovered); }
+    button.secondary { background: rgba(9, 30, 66, 0.04); color: var(--ds-text); }
+    button.secondary:hover { background: rgba(9, 30, 66, 0.08); }
+    button.ghost { background: transparent; color: var(--ds-text-subtle); }
+    button.ghost:hover { color: #CA3521; }
+
+    /* Hours Input */
+    input.hours-input { width: 80px; text-align: right; padding: 6px 8px; border: 1px solid transparent; background: var(--ds-background-input); border-radius: 3px; }
+    input.hours-input:focus { background: #fff; border-color: var(--ds-border-focused); outline: none; }
+    
+    .estimation-row { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; border-top: 1px solid var(--ds-border); }
+
+    /* Toggle */
+    .switch { position: relative; display: inline-block; width: 32px; height: 16px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #6B778C; transition: .2s; border-radius: 16px; }
+    .slider:before { position: absolute; content: ""; height: 12px; width: 12px; left: 2px; bottom: 2px; background-color: white; transition: .2s; border-radius: 50%; }
+    input:checked + .slider { background-color: var(--ds-background-success-bold); }
+    input:checked + .slider:before { transform: translateX(16px); }
+
+    #file-input { display: none; }
+
+    /* Print */
+    @media print {
+      body { background: white; padding: 0; }
+      header { position: static; box-shadow: none; border-bottom: 2px solid #000; }
+      .client-input-group label { display: block; }
+      .client-name-input { border: none; padding: 0; text-align: right; font-weight: bold; width: auto; }
+      .app-container { display: block; padding: 0; margin: 20px 0; }
+      aside { display: none; }
+      .section-card { box-shadow: none; border: 1px solid #ccc; margin-bottom: 20px; page-break-inside: avoid; }
+      .section-disabled, .task-item.excluded { display: none; }
+      input, select, textarea { border: none; background: transparent; resize: none; appearance: none; padding: 0;}
+      .btn-add-row, .btn-remove-row { display: none; }
+      .global-comment-area { border: none; padding: 0; background: transparent; height: auto; min-height: auto; }
+      
+      /* Print Footer */
+      .app-container::after {
+        content: "Hours: " attr(data-print-hours) " | Services: " attr(data-print-services) " | Licenses: " attr(data-print-licenses) " | TOTAL: " attr(data-print-total);
+        display: block; margin-top: 40px; padding-top: 20px; border-top: 2px solid #000; font-weight: bold; font-size: 16px; text-align: right;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-content">
+    <div class="header-titles">
+      <h1>Implementation Estimation</h1>
+      <p style="margin: 4px 0 0; font-size: 14px; color: #626F86;">Scope & License Planner</p>
+    </div>
+    <div class="client-input-group">
+      <label for="client-name">Customer</label>
+      <input type="text" id="client-name" class="client-name-input" placeholder="Enter customer name...">
+    </div>
+  </div>
+</header>
+
+<div class="app-container" id="main-container">
+  
+  <main>
+    <form id="calc-form" class="sections-wrapper">
+
+      <div class="section-card" id="sec-1">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">1</span><span class="section-title">Intake and Clarification</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-1"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>Review submitted Atlassian Form</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Identify missing or unclear information</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Clarify SLAs, access model and tools in scope with customer</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Confirm which products are required: JSM, JSW, Confluence, Assets</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Document final agreed scope in a short summary</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="1.5" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="section-card" id="sec-2">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">2</span><span class="section-title">High-level Solution Design</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-2"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>Define Jira project types and templates (JSM / JSW)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Design access model (internal team, customer team, roles)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Define SLA logic (response and resolution targets)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Decide on knowledge base needs (separate Confluence space or shared)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Decide whether Assets/CMDB is in scope for this customer</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Confirm integrations required (email, Slack/Teams, Opsgenie, n8n, webhooks)</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="2.5" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="section-card" id="sec-3">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">3</span><span class="section-title">JSM Project Setup</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-3"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>Create JSM project using the agreed template (ITSM or Service desk)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Configure issue types (Incident, Service Request, Change, Problem, Task etc.)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Create portal request types and group them into logical categories</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Configure fields and request forms per request type</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Set up queues for triage, priority, team ownership and SLA breaches</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Configure SLAs (response and resolution) with appropriate calendars</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Adjust workflows if needed (statuses, transitions, resolutions)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Configure automation rules for assignment, notifications and auto-close</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="5.0" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="section-card" id="sec-4">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">4</span><span class="section-title">Jira Software Setup</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-4"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>Create JSW project (Kanban or Scrum) for delivery team</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Configure issue types (Epic, Story, Task, Bug etc.)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Align JSW workflows with JSM lifecycle if needed</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Set up boards, swimlanes and quick filters</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Configure links or automation between JSM tickets and JSW issues</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="3.0" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="section-card" id="sec-5">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">5</span><span class="section-title">Access and Permissions</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-5"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>Create or update Atlassian groups for: JSM agents, JSW users, Confluence users</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Assign groups to product access (JSM, JSW, Confluence)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Add named users based on onboarding form (full name + email)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Map users to Jira project roles (Administrators, Service Desk Team, Viewers)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Assign correct authentication policy (SSO / MFA / guard policy)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Verify portal-only access for customers where applicable</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="2.5" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="section-card" id="sec-6">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">6</span><span class="section-title">Confluence Setup</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-6"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>Create new Confluence space (name and key)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Configure permissions for internal and customer users</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Link JSM project to Confluence space as a knowledge base</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Create base pages (Onboarding guide, SOPs, FAQ, Runbooks)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Set up page templates for recurring documentation</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="2.5" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="section-card" id="sec-7">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">7</span><span class="section-title">Assets (CMDB) Setup</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-7"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>Design object schema (Customer, Environments, Applications, Services)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Create object types and core attributes</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Define relations (Customer → Environment → Application / Service)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Import initial data set (manual or CSV import)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Configure Assets custom fields in JSM request forms</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Test object selection in portal and agent view</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="5.0" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="section-card" id="sec-8">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">8</span><span class="section-title">Integrations & Notifications</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-8"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>Configure email channels (incoming and outgoing)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Align SPF / DKIM / DMARC with customer if required</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Set up Slack or Teams integration for notifications</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Configure Opsgenie integration if incident management is in scope</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Create webhooks or n8n flows for specific automations</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="3.0" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="section-card" id="sec-9">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">9</span><span class="section-title">Testing and UAT</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-9"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>Run end-to-end test scenarios for main request types</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Validate SLAs and queue visibility</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Verify notifications and email flows</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Check customer portal access and permissions</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Log and fix configuration issues discovered during UAT</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="3.0" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="section-card" id="sec-10">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">10</span><span class="section-title">Go-live and Handover</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-10"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>Switch configuration to live usage (enable rules, integrations)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Run walkthrough session with key users and admins</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Provide short admin guide (where and how to change config)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Agree hypercare period and support channel</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="2.5" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="section-card" id="sec-11">
+        <div class="section-header" style="background-color: #DEEBFF; border-bottom-color: #B3D4FF;">
+          <div class="header-left">
+            <span class="section-badge" style="background:#0052CC;">11</span>
+            <span class="section-title" style="color:#0052CC;">License Planning</span>
+          </div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-11"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          
+          <table class="license-table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Product</th>
+                <th style="width: 20%;">Team Name</th>
+                <th style="width: 20%;">Comment</th>
+                <th style="width: 10%;">Count</th>
+                <th style="width: 15%;">Price ($)</th>
+                <th style="width: 10%; text-align:right;">Total</th>
+                <th style="width: 5%;"></th>
+              </tr>
+            </thead>
+            <tbody id="license-rows">
+              </tbody>
+          </table>
+
+          <button type="button" class="btn-add-row" onclick="addLicenseRow()">+ Add Team</button>
+
+          <div class="license-summary-box">
+            <div class="license-summary-title">License Seat Summary</div>
+            <div class="license-summary-grid" id="license-summary">
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card" id="sec-12">
+        <div class="section-header">
+          <div class="header-left">
+            <span class="section-badge">12</span>
+            <span class="section-title">Scope Assumptions & Comments</span>
+          </div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-12"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <textarea id="global-comment" class="global-comment-area" placeholder="Add any scope exclusions, prerequisites, or specific notes for the customer..."></textarea>
+        </div>
+      </div>
+
+    </form>
+  </main>
+
+  <aside>
+    <div class="summary-panel">
+      <div class="summary-header">
+        <h2>Estimation Summary</h2>
+      </div>
+      
+      <div class="summary-body">
+        
+        <div class="summary-row" style="margin-bottom: 20px;">
+          <span class="summary-label">Include Services Cost</span>
+          <label class="switch" style="transform: scale(0.9);">
+            <input type="checkbox" id="toggle-services-cost" checked onchange="toggleServicesCost()">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="summary-row">
+            <span class="summary-label">Total Hours</span>
+            <span class="summary-value" id="total-hours">0.0 h</span>
+        </div>
+        
+        <div id="service-cost-group">
+            <div class="rate-row" style="margin-bottom:12px;">
+              <span class="summary-label" style="font-size:12px;">Hourly Rate</span>
+              <input type="number" id="hourly-rate" value="100" style="width: 70px; text-align:right; border:1px solid #DCDFE4; border-radius:3px; padding:2px 4px; font-size:12px;">
+            </div>
+            <div class="summary-row" style="border-bottom: 1px solid #DCDFE4; padding-bottom:12px; margin-bottom:16px;">
+              <span class="summary-label">Services Cost</span>
+              <span class="summary-value cost-main" id="service-cost">$0</span>
+            </div>
+        </div>
+
+        <div class="summary-row" style="margin-bottom:16px;">
+          <span class="summary-label">License Cost</span>
+          <span class="summary-value cost-main" id="license-cost">$0</span>
+        </div>
+
+        <div class="summary-row total">
+          <span class="summary-label" style="font-weight:700;">Grand Total</span>
+          <span class="summary-value cost-total" id="grand-total">$0</span>
+        </div>
+
+      </div>
+
+      <div class="actions">
+        <button class="primary" onclick="window.print()">Export to PDF</button>
+        
+        <a href="https://www.atlassian.com/software/pricing-calculator" target="_blank" style="text-decoration: none; width: 100%;">
+            <button class="secondary" type="button">Atlassian Pricing Calculator ↗</button>
+        </a>
+
+        <div style="height: 1px; background: #DCDFE4; margin: 4px 0;"></div>
+
+        <button class="secondary" onclick="exportData()">Export JSON</button>
+        <button class="secondary" onclick="document.getElementById('file-input').click()">Import JSON</button>
+        <button class="ghost" onclick="resetDefaults()">Reset to Defaults</button>
+        
+        <input type="file" id="file-input" accept=".json" onchange="importData(event)">
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<script>
+  const STORAGE_KEY = 'atlassian_estimate_final_v6_perfect';
+  
+  // Product Options
+  const PRODUCTS = [
+    "Jira Software",
+    "Jira Service Management",
+    "Jira Product Discovery",
+    "Confluence",
+    "Bitbucket",
+    "Compass",
+    "Atlassian Guard"
+  ];
+
+  const currencyFormatter = new Intl.NumberFormat('en-US', {
+      style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0,
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Listeners
+    document.getElementById('calc-form').addEventListener('change', (e) => {
+        if (e.target.matches('.section-toggle')) handleSectionToggle(e);
+        if (e.target.matches('.task-item input[type="checkbox"]')) handleTaskToggle(e);
+        recalculate();
+    });
+
+    document.getElementById('calc-form').addEventListener('input', (e) => {
+        if (e.target.matches('.hours-input')) recalculate();
+        if (e.target.id === 'client-name' || e.target.id === 'global-comment') saveState();
+        if (e.target.closest('#license-rows')) updateLicenseRow(e.target);
+    });
+
+    document.getElementById('hourly-rate').addEventListener('input', recalculate);
+
+    // 2. Load
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+        try { restoreState(JSON.parse(saved)); } catch(e) { console.error(e); }
+    } else {
+        // Default license row if empty
+        addLicenseRow();
+        recalculate();
+    }
+    
+    // Initial Toggle State Check
+    toggleServicesCostLogic();
+  });
+
+  // --- Logic: UI Toggles ---
+  
+  function toggleServicesCost() {
+      toggleServicesCostLogic();
+      recalculate();
+  }
+
+  function toggleServicesCostLogic() {
+      const isChecked = document.getElementById('toggle-services-cost').checked;
+      const group = document.getElementById('service-cost-group');
+      if(isChecked) {
+          group.style.display = 'block';
+      } else {
+          group.style.display = 'none';
+      }
+  }
+
+  // --- Logic: Sections & Tasks ---
+
+  function handleSectionToggle(e) {
+    const sectionId = e.target.getAttribute('data-target');
+    const card = document.getElementById(sectionId);
+    if (e.target.checked) {
+      card.classList.remove('section-disabled');
+      card.querySelector('.section-body').classList.remove('section-body-disabled');
+    } else {
+      card.classList.add('section-disabled');
+      card.querySelector('.section-body').classList.add('section-body-disabled');
+    }
+    recalculate(); 
+  }
+
+  function handleTaskToggle(e) {
+    const li = e.target.closest('.task-item');
+    if (e.target.checked) li.classList.remove('excluded');
+    else li.classList.add('excluded');
+  }
+
+  // --- Logic: Calculations ---
+
+  function recalculate() {
+    // 1. Services Calculation
+    let totalHours = 0;
+    document.querySelectorAll('.section-card').forEach(card => {
+      // Skip license (11) and comment (12) sections for hours calculation
+      if(card.id === 'sec-11' || card.id === 'sec-12') return;
+
+      const toggle = card.querySelector('.section-toggle');
+      if (toggle && toggle.checked) {
+        const input = card.querySelector('.hours-input');
+        if(input) {
+            const val = parseFloat(input.value);
+            if (!isNaN(val) && val >= 0) totalHours += val;
+        }
+      }
+    });
+
+    // 2. Licenses Calculation
+    let totalLicenseCost = 0;
+    const licenseSection = document.getElementById('sec-11');
+    const isLicenseEnabled = licenseSection.querySelector('.section-toggle').checked;
+    
+    if (isLicenseEnabled) {
+        document.querySelectorAll('#license-rows tr').forEach(tr => {
+            const count = parseInt(tr.querySelector('.count-input').value) || 0;
+            const price = parseFloat(tr.querySelector('.price-input').value) || 0;
+            totalLicenseCost += (count * price);
+        });
+    }
+
+    // 3. Totals
+    const rate = parseFloat(document.getElementById('hourly-rate').value) || 0;
+    const includeServiceCost = document.getElementById('toggle-services-cost').checked;
+    
+    let serviceCost = 0;
+    if (includeServiceCost) {
+        serviceCost = totalHours * rate;
+    }
+
+    const grandTotal = serviceCost + totalLicenseCost;
+
+    // 4. Update UI
+    const totalHoursStr = totalHours.toFixed(1) + ' h';
+    document.getElementById('total-hours').textContent = totalHoursStr;
+    document.getElementById('service-cost').textContent = currencyFormatter.format(serviceCost);
+    document.getElementById('license-cost').textContent = currencyFormatter.format(totalLicenseCost);
+    document.getElementById('grand-total').textContent = currencyFormatter.format(grandTotal);
+
+    // Print attrs
+    const container = document.getElementById('main-container');
+    container.setAttribute('data-print-hours', totalHoursStr); // Always set hours
+    container.setAttribute('data-print-services', includeServiceCost ? currencyFormatter.format(serviceCost) : 'Excluded');
+    container.setAttribute('data-print-licenses', currencyFormatter.format(totalLicenseCost));
+    container.setAttribute('data-print-total', currencyFormatter.format(grandTotal));
+    
+    // Also update license summary box
+    updateLicenseSummaryBox();
+    saveState();
+  }
+
+  // --- Logic: License Calculator ---
+
+  function addLicenseRow(data = null) {
+    const tbody = document.getElementById('license-rows');
+    const tr = document.createElement('tr');
+    
+    let options = PRODUCTS.map(p => `<option value="${p}">${p}</option>`).join('');
+    
+    tr.innerHTML = `
+      <td><select class="license-select product-select">${options}</select></td>
+      <td><input type="text" class="license-input team-input" placeholder="e.g. DevOps"></td>
+      <td><input type="text" class="license-input comment-input" placeholder="Details"></td>
+      <td><input type="number" class="license-input count-input" value="0" min="0"></td>
+      <td><input type="number" class="license-input price-input" value="0" min="0" step="0.01"></td>
+      <td class="row-total-cell">$0</td>
+      <td style="text-align:center;">
+        <button type="button" class="btn-remove-row" onclick="removeLicenseRow(this)">×</button>
+      </td>
+    `;
+
+    tbody.appendChild(tr);
+
+    if (data) {
+        tr.querySelector('.product-select').value = data.product;
+        tr.querySelector('.team-input').value = data.team;
+        tr.querySelector('.comment-input').value = data.comment;
+        tr.querySelector('.count-input').value = data.count;
+        tr.querySelector('.price-input').value = data.price || 0;
+        calculateRowTotal(tr);
+    }
+  }
+
+  function updateLicenseRow(input) {
+      const tr = input.closest('tr');
+      calculateRowTotal(tr);
+      recalculate(); // Updates sidebar totals
+  }
+
+  function calculateRowTotal(tr) {
+      const count = parseInt(tr.querySelector('.count-input').value) || 0;
+      const price = parseFloat(tr.querySelector('.price-input').value) || 0;
+      const total = count * price;
+      tr.querySelector('.row-total-cell').textContent = currencyFormatter.format(total);
+  }
+
+  function removeLicenseRow(btn) {
+    btn.closest('tr').remove();
+    recalculate();
+  }
+
+  function updateLicenseSummaryBox() {
+    const summary = {};
+    const rows = document.querySelectorAll('#license-rows tr');
+    const isEnabled = document.getElementById('sec-11').querySelector('.section-toggle').checked;
+    
+    if(!isEnabled) {
+        document.getElementById('license-summary').innerHTML = '<span style="color:#6B778C; font-size:13px;">Section excluded</span>';
+        return;
+    }
+
+    rows.forEach(tr => {
+        const prod = tr.querySelector('.product-select').value;
+        const count = parseInt(tr.querySelector('.count-input').value) || 0;
+        if(count > 0) {
+            summary[prod] = (summary[prod] || 0) + count;
+        }
+    });
+
+    const container = document.getElementById('license-summary');
+    container.innerHTML = '';
+    
+    if (Object.keys(summary).length === 0) {
+        container.innerHTML = '<span style="color:#6B778C; font-size:13px;">No licenses added yet.</span>';
+    } else {
+        Object.keys(summary).forEach(prod => {
+            const div = document.createElement('div');
+            div.className = 'license-tag';
+            div.innerHTML = `<span>${prod}</span> <strong>${summary[prod]}</strong>`;
+            container.appendChild(div);
+        });
+    }
+  }
+
+  // --- State Management ---
+
+  function gatherState() {
+    const state = {
+      clientName: document.getElementById('client-name').value,
+      rate: document.getElementById('hourly-rate').value,
+      includeServiceCost: document.getElementById('toggle-services-cost').checked,
+      comments: document.getElementById('global-comment').value,
+      sections: {},
+      licenses: []
+    };
+
+    // Sections
+    document.querySelectorAll('.section-card').forEach(card => {
+      const id = card.id;
+      const secToggle = card.querySelector('.section-toggle');
+      const hoursInput = card.querySelector('.hours-input');
+      const taskStates = [];
+      card.querySelectorAll('.task-item input[type="checkbox"]').forEach(cb => {
+        taskStates.push(cb.checked);
+      });
+      state.sections[id] = {
+        active: secToggle.checked,
+        hours: hoursInput ? hoursInput.value : 0,
+        tasks: taskStates
+      };
+    });
+
+    // Licenses
+    document.querySelectorAll('#license-rows tr').forEach(tr => {
+        state.licenses.push({
+            product: tr.querySelector('.product-select').value,
+            team: tr.querySelector('.team-input').value,
+            comment: tr.querySelector('.comment-input').value,
+            count: tr.querySelector('.count-input').value,
+            price: tr.querySelector('.price-input').value
+        });
+    });
+
+    return state;
+  }
+
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(gatherState()));
+  }
+
+  function restoreState(state) {
+      if (!state) return;
+      if (state.clientName) document.getElementById('client-name').value = state.clientName;
+      if (state.rate) document.getElementById('hourly-rate').value = state.rate;
+      if (state.comments) document.getElementById('global-comment').value = state.comments;
+      
+      // Restore toggle
+      if (state.includeServiceCost !== undefined) {
+          document.getElementById('toggle-services-cost').checked = state.includeServiceCost;
+          toggleServicesCostLogic();
+      }
+
+      // Restore Sections
+      if (state.sections) {
+        Object.keys(state.sections).forEach(id => {
+          const data = state.sections[id];
+          const card = document.getElementById(id);
+          if (!card) return;
+
+          const secToggle = card.querySelector('.section-toggle');
+          secToggle.checked = data.active;
+          if (!data.active) {
+             card.classList.add('section-disabled');
+             card.querySelector('.section-body').classList.add('section-body-disabled');
+          } else {
+             card.classList.remove('section-disabled');
+             card.querySelector('.section-body').classList.remove('section-body-disabled');
+          }
+
+          const hoursInput = card.querySelector('.hours-input');
+          if (hoursInput) hoursInput.value = data.hours;
+
+          if (data.tasks) {
+            const checkboxes = card.querySelectorAll('.task-item input[type="checkbox"]');
+            checkboxes.forEach((cb, idx) => {
+              if (data.tasks[idx] !== undefined) {
+                cb.checked = data.tasks[idx];
+                const li = cb.closest('.task-item');
+                if (cb.checked) li.classList.remove('excluded');
+                else li.classList.add('excluded');
+              }
+            });
+          }
+        });
+      }
+
+      // Restore Licenses
+      const tbody = document.getElementById('license-rows');
+      tbody.innerHTML = ''; 
+      if (state.licenses && state.licenses.length > 0) {
+          state.licenses.forEach(row => addLicenseRow(row));
+      } else {
+          addLicenseRow(); 
+      }
+
+      recalculate();
+  }
+
+  // --- Actions ---
+
+  function exportData() {
+    const state = gatherState();
+    const blob = new Blob([JSON.stringify(state, null, 2)], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const client = state.clientName ? state.clientName.replace(/[^a-z0-9]/gi, '_').toLowerCase() : 'estimate';
+    const dateStr = new Date().toISOString().split('T')[0];
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${client}_${dateStr}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        restoreState(JSON.parse(e.target.result));
+        saveState();
+        alert('Estimate loaded successfully');
+      } catch (err) { alert('Invalid JSON'); }
+      event.target.value = '';
+    };
+    reader.readAsText(file);
+  }
+
+  function resetDefaults() {
+    if(confirm('Reset all data?')) {
+      localStorage.removeItem(STORAGE_KEY);
+      location.reload();
+    }
+  }
+</script>
+
+</body>
+</html>
