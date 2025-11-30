@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Implementation & License Estimation</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik00LjE1OTUgMTMuNjM2NEw4Ljc5NTc3IDkuNDUyODZDOS4wNjAwNCA5LjIxNDQ0IDkuMzQ0NzIgOS4wMjg1NyA5LjY0MDYyIDkuMDI4NTdIOS42NTM5OEM5LjkzNjE0IDkuMDM0ODUgMTAuMjA0NyA5LjIwOTI2IDEwLjQ2MzIgOS40NDcyTDExLjk4OTUgMTkuNjM2NEg3LjE5NDc1QzYuMzY3OTYgMTkuNjM2NCA1LjU3NjY2IDE5LjMwNzMgNS4wMzA2NCAxOC43MzdMNC4wMjI4MyAxNy42ODU4QzMuMDc2NzUgMTYuNjk4NiAzLjEzNTk4IDE1LjE0MTMgNC4xNTk1IDEzLjYzNjRWTTEzLjUzNjggNC4zNjM2NEw4LjkwMDUxIDguNTQ3MTRDOC42MzYyMyA4Ljc4NTU2IDguMzUxNTUgOC45NzE0MyA4LjA1NTY1IDguOTcxNDNIODuMDQyMjlDNy43NjAxMiA4Ljk2NTE1IDcuNDkxNTcgOC43OTA3NCA3LjIzMzE0IDguNTUyOEw1LjcwNjg0IDAuMzYzNjM2SDE2LjgwNTJDMjEuMTk0MSAwLjM2MzYzNiAyNC41NzM1IDQuMzQyMDUgMjMuNzY2NyA4LjY0OTg2QzIzLjY0NzkgOS4yODQzMyAyMy40ODUzIDkuODU0NCAyMy4yNzc1IDEwLjM2MzZIMTMuNTM2OFY0LjM2MzY0Wk0xNS45ODk1IDE5LjYzNjRMMTEuMzUzMyAxNS40NTI5QzExLjA4OSAxNS4yMTQ0IDEwLjgwNDMgMTUuMDI4NiAxMC41MDgzIDE1LjAyODZIMTAuNDk1QzEwLjIxMjggMTUuMDM0OCA5Ljk0NDI4IDE1LjIwOTMgOS42ODU3NCAxNS40NDcyTDguMTU5NTEgMTkuNjM2NEgxNS45ODk1WiIgZmlsbD0iIzAwNTJDQyIvPgo8L3N2Zz4=">
   <style>
     :root {
-      /* --- Atlassian Design Tokens 2024 --- */
+      /* --- Atlassian Design Tokens --- */
       --ds-surface: #FFFFFF;
       --ds-surface-sunken: #F7F8F9;
       --ds-background-input: #F4F5F7;
@@ -16,7 +16,6 @@
       --ds-border: #DCDFE4;
       --ds-border-focused: #388BFF;
       --ds-background-brand-bold: #0C66E4;
-      --ds-background-brand-bold-hovered: #0055CC;
       --ds-background-success-bold: #36B37E;
       --ds-background-danger-bold: #CA3521;
       
@@ -90,11 +89,7 @@
     }
     
     .client-name-input:hover { background: var(--ds-background-input); }
-    .client-name-input:focus { 
-      background: #fff; 
-      border-color: var(--ds-border-focused); 
-      outline: none; 
-    }
+    .client-name-input:focus { background: #fff; border-color: var(--ds-border-focused); outline: none; }
 
     /* --- Layout --- */
     .app-container {
@@ -113,6 +108,27 @@
       .header-content { flex-direction: column; align-items: flex-start; gap: 16px; }
       .client-input-group { align-items: flex-start; width: 100%; }
       .client-name-input { text-align: left; width: 100%; }
+    }
+
+    /* --- Phase Headers --- */
+    .phase-header {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--ds-text-subtle);
+      margin: 32px 0 12px 0;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #EBECF0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .phase-header:first-of-type { margin-top: 0; }
+    .phase-badge {
+        background: #EBECF0;
+        color: var(--ds-text);
+        padding: 2px 6px;
+        border-radius: 3px;
     }
 
     /* --- Cards --- */
@@ -171,104 +187,29 @@
     input[type="checkbox"]:checked::after { content: ''; position: absolute; margin: 1px 0 0 4px; width: 4px; height: 8px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); }
 
     /* --- License Table Styles --- */
-    .license-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      margin-bottom: 16px;
-    }
-    
-    .license-table th {
-      text-align: left;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: var(--ds-text-subtle);
-      border-bottom: 2px solid var(--ds-border);
-      padding: 8px 4px;
-    }
-    
-    .license-table td {
-      padding: 8px 4px;
-      border-bottom: 1px solid var(--ds-border);
-      vertical-align: top;
-    }
+    .license-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px; }
+    .license-table th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--ds-text-subtle); border-bottom: 2px solid var(--ds-border); padding: 8px 4px; }
+    .license-table td { padding: 8px 4px; border-bottom: 1px solid var(--ds-border); vertical-align: top; }
 
-    .license-input, .license-select {
-      width: 100%;
-      padding: 6px 8px;
-      border: 1px solid var(--ds-border);
-      background: var(--ds-background-input);
-      border-radius: 3px;
-      font-family: inherit;
-      font-size: 13px;
-    }
-    
-    .license-input:focus, .license-select:focus {
-      background: #fff;
-      border-color: var(--ds-border-focused);
-      outline: none;
-    }
+    .license-input, .license-select { width: 100%; padding: 6px 8px; border: 1px solid var(--ds-border); background: var(--ds-background-input); border-radius: 3px; font-family: inherit; font-size: 13px; }
+    .license-input:focus, .license-select:focus { background: #fff; border-color: var(--ds-border-focused); outline: none; }
 
-    .row-total-cell {
-        font-weight: 600;
-        text-align: right;
-        padding-top: 14px;
-        color: var(--ds-text);
-    }
+    .row-total-cell { font-weight: 600; text-align: right; padding-top: 14px; color: var(--ds-text); }
 
-    .btn-add-row {
-      background: transparent;
-      color: var(--ds-background-brand-bold);
-      font-weight: 500;
-      padding: 0;
-      text-align: left;
-      width: auto;
-      justify-content: flex-start;
-    }
+    .btn-add-row { background: transparent; color: var(--ds-background-brand-bold); font-weight: 500; padding: 0; text-align: left; width: auto; justify-content: flex-start; }
     .btn-add-row:hover { background: transparent; text-decoration: underline; }
 
-    .btn-remove-row {
-      color: var(--ds-text-subtle);
-      background: transparent;
-      width: 24px;
-      height: 24px;
-      padding: 0;
-      font-size: 18px;
-      line-height: 1;
-    }
+    .btn-remove-row { color: var(--ds-text-subtle); background: transparent; width: 24px; height: 24px; padding: 0; font-size: 18px; line-height: 1; }
     .btn-remove-row:hover { color: var(--ds-background-danger-bold); background: transparent; }
 
-    .license-summary-box {
-      margin-top: 20px;
-      padding: 16px;
-      background: var(--ds-surface-sunken);
-      border-radius: 3px;
-    }
-    
+    .license-summary-box { margin-top: 20px; padding: 16px; background: var(--ds-surface-sunken); border-radius: 3px; }
     .license-summary-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--ds-text-subtle); margin-bottom: 8px; }
     .license-summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
     .license-tag { display: flex; justify-content: space-between; font-size: 13px; background: #fff; padding: 4px 8px; border-radius: 3px; border: 1px solid var(--ds-border); }
 
-    /* --- Big Textarea for Comments --- */
-    .global-comment-area {
-      width: 100%;
-      min-height: 120px;
-      padding: 12px;
-      border: 1px solid var(--ds-border);
-      background: var(--ds-background-input);
-      border-radius: var(--ds-radius);
-      font-family: inherit;
-      font-size: 14px;
-      line-height: 1.5;
-      color: var(--ds-text);
-      resize: vertical;
-    }
-    .global-comment-area:focus {
-      background: #fff;
-      border-color: var(--ds-border-focused);
-      outline: none;
-    }
+    /* --- Big Textarea --- */
+    .global-comment-area { width: 100%; min-height: 120px; padding: 12px; border: 1px solid var(--ds-border); background: var(--ds-background-input); border-radius: var(--ds-radius); font-family: inherit; font-size: 14px; line-height: 1.5; color: var(--ds-text); resize: vertical; }
+    .global-comment-area:focus { background: #fff; border-color: var(--ds-border-focused); outline: none; }
 
     /* --- Sidebar --- */
     aside { position: sticky; top: 110px; }
@@ -276,24 +217,10 @@
     .summary-header { padding: 16px 20px; background: var(--ds-surface-sunken); border-bottom: 1px solid var(--ds-border); }
     .summary-header h2 { margin: 0; font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--ds-text-subtle); }
     .summary-body { padding: 24px 20px; }
-    
-    .summary-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        margin-bottom: 12px;
-        font-size: 14px;
-    }
-    
-    .summary-row.total {
-        margin-top: 16px;
-        padding-top: 16px;
-        border-top: 2px solid var(--ds-border);
-    }
-
+    .summary-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; font-size: 14px; }
+    .summary-row.total { margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--ds-border); }
     .summary-label { color: var(--ds-text-subtle); }
     .summary-value { font-weight: 600; color: var(--ds-text); }
-    
     .cost-main { font-size: 16px; }
     .cost-total { font-size: 20px; color: var(--ds-background-brand-bold); font-weight: 700; }
 
@@ -307,20 +234,16 @@
     button.ghost { background: transparent; color: var(--ds-text-subtle); }
     button.ghost:hover { color: #CA3521; }
 
-    /* Hours Input */
+    /* Inputs & Toggles */
     input.hours-input { width: 80px; text-align: right; padding: 6px 8px; border: 1px solid transparent; background: var(--ds-background-input); border-radius: 3px; }
     input.hours-input:focus { background: #fff; border-color: var(--ds-border-focused); outline: none; }
-    
     .estimation-row { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; border-top: 1px solid var(--ds-border); }
-
-    /* Toggle */
     .switch { position: relative; display: inline-block; width: 32px; height: 16px; }
     .switch input { opacity: 0; width: 0; height: 0; }
     .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #6B778C; transition: .2s; border-radius: 16px; }
     .slider:before { position: absolute; content: ""; height: 12px; width: 12px; left: 2px; bottom: 2px; background-color: white; transition: .2s; border-radius: 50%; }
     input:checked + .slider { background-color: var(--ds-background-success-bold); }
     input:checked + .slider:before { transform: translateX(16px); }
-
     #file-input { display: none; }
 
     /* Print */
@@ -337,7 +260,9 @@
       .btn-add-row, .btn-remove-row { display: none; }
       .global-comment-area { border: none; padding: 0; background: transparent; height: auto; min-height: auto; }
       
-      /* Print Footer */
+      /* HIDE Phase Headers on Print */
+      .no-print { display: none !important; }
+
       .app-container::after {
         content: "Hours: " attr(data-print-hours) " | Services: " attr(data-print-services) " | Licenses: " attr(data-print-licenses) " | TOTAL: " attr(data-print-total);
         display: block; margin-top: 40px; padding-top: 20px; border-top: 2px solid #000; font-weight: bold; font-size: 16px; text-align: right;
@@ -365,191 +290,290 @@
   <main>
     <form id="calc-form" class="sections-wrapper">
 
-      <div class="section-card" id="sec-1">
+      <div class="phase-header no-print">
+        <span class="phase-badge">A</span>
+        <span>Administrative and Contractual Onboarding</span>
+      </div>
+
+      <div class="section-card billable-section" id="sec-1">
         <div class="section-header">
-          <div class="header-left"><span class="section-badge">1</span><span class="section-title">Intake and Clarification</span></div>
+          <div class="header-left"><span class="section-badge">1</span><span class="section-title">Initial Communication and Kick-off</span></div>
           <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-1"><span class="slider"></span></label>
         </div>
         <div class="section-body">
           <ul class="tasks-list">
-            <li class="task-item"><input type="checkbox" checked><span>Review submitted Atlassian Form</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Identify missing or unclear information</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Clarify SLAs, access model and tools in scope with customer</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Confirm which products are required: JSM, JSW, Confluence, Assets</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Document final agreed scope in a short summary</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Kick-off call or meeting</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Overview of the support and service model</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Identification of key stakeholders from both sides</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Clarification of goals and expectations</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Alignment on the implementation timeline</span></li>
           </ul>
-          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="1.5" step="0.5" min="0"></div>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="1.0" step="0.5" min="0"></div>
         </div>
       </div>
 
-      <div class="section-card" id="sec-2">
+      <div class="section-card billable-section" id="sec-2">
         <div class="section-header">
-          <div class="header-left"><span class="section-badge">2</span><span class="section-title">High-level Solution Design</span></div>
+          <div class="header-left"><span class="section-badge">2</span><span class="section-title">Contractual, Legal, and Commercial Matters</span></div>
           <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-2"><span class="slider"></span></label>
         </div>
         <div class="section-body">
           <ul class="tasks-list">
-            <li class="task-item"><input type="checkbox" checked><span>Define Jira project types and templates (JSM / JSW)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Design access model (internal team, customer team, roles)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Define SLA logic (response and resolution targets)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Decide on knowledge base needs (separate Confluence space or shared)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Decide whether Assets/CMDB is in scope for this customer</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Confirm integrations required (email, Slack/Teams, Opsgenie, n8n, webhooks)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Signing of contract / SOW</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>NDA (if required)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>SLA definition (support levels, response/resolution times)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Agreement on pricing / billing terms</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Providing billing and invoicing contacts</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Defining the billing cycle</span></li>
           </ul>
-          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="2.5" step="0.5" min="0"></div>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="1.0" step="0.5" min="0"></div>
         </div>
       </div>
 
-      <div class="section-card" id="sec-3">
+      <div class="section-card billable-section" id="sec-3">
         <div class="section-header">
-          <div class="header-left"><span class="section-badge">3</span><span class="section-title">JSM Project Setup</span></div>
+          <div class="header-left"><span class="section-badge">3</span><span class="section-title">Collection of Initial Customer Information</span></div>
           <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-3"><span class="slider"></span></label>
         </div>
         <div class="section-body">
           <ul class="tasks-list">
-            <li class="task-item"><input type="checkbox" checked><span>Create JSM project using the agreed template (ITSM or Service desk)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Configure issue types (Incident, Service Request, Change, Problem, Task etc.)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Create portal request types and group them into logical categories</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Configure fields and request forms per request type</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Set up queues for triage, priority, team ownership and SLA breaches</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Configure SLAs (response and resolution) with appropriate calendars</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Adjust workflows if needed (statuses, transitions, resolutions)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Configure automation rules for assignment, notifications and auto-close</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Completion of the Atlassian Onboarding Form</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Collecting contacts of key users and stakeholders</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Gathering information about existing processes and systems</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Exchanging internal policies / SOPs / flow diagrams</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Collecting details about integrations, environments, and tools</span></li>
           </ul>
-          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="5.0" step="0.5" min="0"></div>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="2.0" step="0.5" min="0"></div>
         </div>
       </div>
 
-      <div class="section-card" id="sec-4">
+      <div class="phase-header no-print">
+        <span class="phase-badge">B</span>
+        <span>Technical Onboarding (Atlassian)</span>
+      </div>
+
+      <div class="section-card billable-section" id="sec-4">
         <div class="section-header">
-          <div class="header-left"><span class="section-badge">4</span><span class="section-title">Jira Software Setup</span></div>
+          <div class="header-left"><span class="section-badge">4</span><span class="section-title">High-level Solution Design</span></div>
           <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-4"><span class="slider"></span></label>
         </div>
         <div class="section-body">
           <ul class="tasks-list">
-            <li class="task-item"><input type="checkbox" checked><span>Create JSW project (Kanban or Scrum) for delivery team</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Configure issue types (Epic, Story, Task, Bug etc.)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Align JSW workflows with JSM lifecycle if needed</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Set up boards, swimlanes and quick filters</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Configure links or automation between JSM tickets and JSW issues</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Selection of project types (JSM / JSW)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Designing the access model (groups, roles, customers)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Defining SLA logic</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Designing the Assets/CMDB structure (if in scope)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Selecting required integrations and communication channels</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Choosing documentation structure (Confluence)</span></li>
           </ul>
           <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="3.0" step="0.5" min="0"></div>
         </div>
       </div>
 
-      <div class="section-card" id="sec-5">
+      <div class="section-card billable-section" id="sec-5">
         <div class="section-header">
-          <div class="header-left"><span class="section-badge">5</span><span class="section-title">Access and Permissions</span></div>
+          <div class="header-left"><span class="section-badge">5</span><span class="section-title">Jira Service Management Setup</span></div>
           <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-5"><span class="slider"></span></label>
         </div>
         <div class="section-body">
           <ul class="tasks-list">
-            <li class="task-item"><input type="checkbox" checked><span>Create or update Atlassian groups for: JSM agents, JSW users, Confluence users</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Assign groups to product access (JSM, JSW, Confluence)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Add named users based on onboarding form (full name + email)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Map users to Jira project roles (Administrators, Service Desk Team, Viewers)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Assign correct authentication policy (SSO / MFA / guard policy)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Verify portal-only access for customers where applicable</span></li>
-          </ul>
-          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="2.5" step="0.5" min="0"></div>
-        </div>
-      </div>
-
-      <div class="section-card" id="sec-6">
-        <div class="section-header">
-          <div class="header-left"><span class="section-badge">6</span><span class="section-title">Confluence Setup</span></div>
-          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-6"><span class="slider"></span></label>
-        </div>
-        <div class="section-body">
-          <ul class="tasks-list">
-            <li class="task-item"><input type="checkbox" checked><span>Create new Confluence space (name and key)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Configure permissions for internal and customer users</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Link JSM project to Confluence space as a knowledge base</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Create base pages (Onboarding guide, SOPs, FAQ, Runbooks)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Set up page templates for recurring documentation</span></li>
-          </ul>
-          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="2.5" step="0.5" min="0"></div>
-        </div>
-      </div>
-
-      <div class="section-card" id="sec-7">
-        <div class="section-header">
-          <div class="header-left"><span class="section-badge">7</span><span class="section-title">Assets (CMDB) Setup</span></div>
-          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-7"><span class="slider"></span></label>
-        </div>
-        <div class="section-body">
-          <ul class="tasks-list">
-            <li class="task-item"><input type="checkbox" checked><span>Design object schema (Customer, Environments, Applications, Services)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Create object types and core attributes</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Define relations (Customer → Environment → Application / Service)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Import initial data set (manual or CSV import)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Configure Assets custom fields in JSM request forms</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Test object selection in portal and agent view</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Creating the JSM project</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Configuring issue types</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Setting up request types, forms, and fields</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Designing portal structure and grouping categories</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Configuring SLAs (response/resolution)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Setting working calendars</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Creating queues (triage, priority, incident, escalation)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Workflow configuration (statuses, transitions, resolutions)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Automation setup (assignment, triage, auto-close, notifications)</span></li>
           </ul>
           <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="5.0" step="0.5" min="0"></div>
         </div>
       </div>
 
-      <div class="section-card" id="sec-8">
+      <div class="section-card billable-section" id="sec-6">
         <div class="section-header">
-          <div class="header-left"><span class="section-badge">8</span><span class="section-title">Integrations & Notifications</span></div>
-          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-8"><span class="slider"></span></label>
+          <div class="header-left"><span class="section-badge">6</span><span class="section-title">Jira Software Setup (optional)</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-6"><span class="slider"></span></label>
         </div>
         <div class="section-body">
           <ul class="tasks-list">
-            <li class="task-item"><input type="checkbox" checked><span>Configure email channels (incoming and outgoing)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Align SPF / DKIM / DMARC with customer if required</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Set up Slack or Teams integration for notifications</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Configure Opsgenie integration if incident management is in scope</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Create webhooks or n8n flows for specific automations</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Creating the JSW project</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Configuring issue types (Epic/Story/Bug/Task)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Aligning JSW workflows with JSM</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Configuring Kanban/Scrum boards</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Linking and automation between JSM → JSW</span></li>
           </ul>
           <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="3.0" step="0.5" min="0"></div>
         </div>
       </div>
 
-      <div class="section-card" id="sec-9">
+      <div class="section-card billable-section" id="sec-7">
         <div class="section-header">
-          <div class="header-left"><span class="section-badge">9</span><span class="section-title">Testing and UAT</span></div>
-          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-9"><span class="slider"></span></label>
+          <div class="header-left"><span class="section-badge">7</span><span class="section-title">Access, Authentication, and User Management</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-7"><span class="slider"></span></label>
         </div>
         <div class="section-body">
           <ul class="tasks-list">
-            <li class="task-item"><input type="checkbox" checked><span>Run end-to-end test scenarios for main request types</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Validate SLAs and queue visibility</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Verify notifications and email flows</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Check customer portal access and permissions</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Log and fix configuration issues discovered during UAT</span></li>
-          </ul>
-          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="3.0" step="0.5" min="0"></div>
-        </div>
-      </div>
-
-      <div class="section-card" id="sec-10">
-        <div class="section-header">
-          <div class="header-left"><span class="section-badge">10</span><span class="section-title">Go-live and Handover</span></div>
-          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-10"><span class="slider"></span></label>
-        </div>
-        <div class="section-body">
-          <ul class="tasks-list">
-            <li class="task-item"><input type="checkbox" checked><span>Switch configuration to live usage (enable rules, integrations)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Run walkthrough session with key users and admins</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Provide short admin guide (where and how to change config)</span></li>
-            <li class="task-item"><input type="checkbox" checked><span>Agree hypercare period and support channel</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Creating/updating Atlassian groups (Agents, Users)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Assigning product access</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Adding users (full name + email)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Assigning Jira project roles</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Applying authentication policies (SSO/MFA/Guard Policy)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Setting up portal-only customers</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Access validation and permission testing</span></li>
           </ul>
           <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="2.5" step="0.5" min="0"></div>
         </div>
       </div>
 
-      <div class="section-card" id="sec-11">
-        <div class="section-header" style="background-color: #DEEBFF; border-bottom-color: #B3D4FF;">
-          <div class="header-left">
-            <span class="section-badge" style="background:#0052CC;">11</span>
-            <span class="section-title" style="color:#0052CC;">License Planning</span>
-          </div>
+      <div class="section-card billable-section" id="sec-8">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">8</span><span class="section-title">Confluence Setup</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-8"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>Creating a new space</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Configuring access permissions (internal / customer)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Linking JSM → Confluence as a Knowledge Base</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Creating base documentation pages</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Preparing reusable documentation templates</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="2.0" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="section-card billable-section" id="sec-9">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">9</span><span class="section-title">Assets / CMDB Setup (optional)</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-9"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>Designing the object schema</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Creating object types, attributes and relationships</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Importing objects (manual or CSV)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Adding Assets fields to JSM request forms</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Testing object lookup in the portal and agent view</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="4.0" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="section-card billable-section" id="sec-10">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">10</span><span class="section-title">Integrations</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-10"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>Configuring the email channel (incoming/outgoing)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Slack or Microsoft Teams integration</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Using built-in Ops integration (for Premium/Enterprise)</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Setting up webhook triggers or API integrations</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Full testing of all integrations</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="3.0" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="phase-header no-print">
+        <span class="phase-badge">C</span>
+        <span>Operational Onboarding</span>
+      </div>
+
+      <div class="section-card billable-section" id="sec-11">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">11</span><span class="section-title">Testing & UAT</span></div>
           <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-11"><span class="slider"></span></label>
         </div>
         <div class="section-body">
-          
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>End-to-end testing of all core flows</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>SLA, Automation and Portal testing</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Integration testing</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Logging and resolving issues discovered during UAT</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="4.0" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="section-card billable-section" id="sec-12">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">12</span><span class="section-title">Go-live</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-12"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>Enabling final production configurations</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Real-world access validation with the customer</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Final check of all roles, rules, notifications</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="1.0" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="section-card billable-section" id="sec-13">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">13</span><span class="section-title">Handover</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-13"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>Providing the admin guide and user guides</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Customer team training</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Demonstration of queues, SLAs, and Knowledge Base</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Explanation of the operational model</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="2.0" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="section-card billable-section" id="sec-14">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">14</span><span class="section-title">Hypercare</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-14"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>Defining the hypercare period and communication channels</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Responsible contacts on both sides</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Reactive and proactive support after go-live</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="2.0" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="phase-header no-print">
+        <span class="phase-badge">D</span>
+        <span>Post-Onboarding</span>
+      </div>
+
+      <div class="section-card billable-section" id="sec-15">
+        <div class="section-header">
+          <div class="header-left"><span class="section-badge">15</span><span class="section-title">Post-onboarding Review</span></div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-15"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
+          <ul class="tasks-list">
+            <li class="task-item"><input type="checkbox" checked><span>Customer satisfaction check</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>First 30-day performance review</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>SLA performance analysis</span></li>
+            <li class="task-item"><input type="checkbox" checked><span>Identifying improvement opportunities & next phase</span></li>
+          </ul>
+          <div class="estimation-row"><label>Estimated Hours</label><input type="number" class="hours-input" value="1.0" step="0.5" min="0"></div>
+        </div>
+      </div>
+
+      <div class="section-card" id="sec-license">
+        <div class="section-header" style="background-color: #DEEBFF; border-bottom-color: #B3D4FF;">
+          <div class="header-left">
+            <span class="section-title" style="color:#0052CC;">License Planning</span>
+          </div>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-license"><span class="slider"></span></label>
+        </div>
+        <div class="section-body">
           <table class="license-table">
             <thead>
               <tr>
@@ -562,27 +586,22 @@
                 <th style="width: 5%;"></th>
               </tr>
             </thead>
-            <tbody id="license-rows">
-              </tbody>
+            <tbody id="license-rows"></tbody>
           </table>
-
           <button type="button" class="btn-add-row" onclick="addLicenseRow()">+ Add Team</button>
-
           <div class="license-summary-box">
             <div class="license-summary-title">License Seat Summary</div>
-            <div class="license-summary-grid" id="license-summary">
-              </div>
+            <div class="license-summary-grid" id="license-summary"></div>
           </div>
         </div>
       </div>
 
-      <div class="section-card" id="sec-12">
+      <div class="section-card" id="sec-comments">
         <div class="section-header">
           <div class="header-left">
-            <span class="section-badge">12</span>
             <span class="section-title">Scope Assumptions & Comments</span>
           </div>
-          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-12"><span class="slider"></span></label>
+          <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-comments"><span class="slider"></span></label>
         </div>
         <div class="section-body">
           <textarea id="global-comment" class="global-comment-area" placeholder="Add any scope exclusions, prerequisites, or specific notes for the customer..."></textarea>
@@ -638,17 +657,13 @@
 
       <div class="actions">
         <button class="primary" onclick="window.print()">Export to PDF</button>
-        
         <a href="https://www.atlassian.com/software/pricing-calculator" target="_blank" style="text-decoration: none; width: 100%;">
             <button class="secondary" type="button">Atlassian Pricing Calculator ↗</button>
         </a>
-
         <div style="height: 1px; background: #DCDFE4; margin: 4px 0;"></div>
-
         <button class="secondary" onclick="exportData()">Export JSON</button>
         <button class="secondary" onclick="document.getElementById('file-input').click()">Import JSON</button>
         <button class="ghost" onclick="resetDefaults()">Reset to Defaults</button>
-        
         <input type="file" id="file-input" accept=".json" onchange="importData(event)">
       </div>
     </div>
@@ -657,9 +672,8 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'atlassian_estimate_final_v6_perfect';
+  const STORAGE_KEY = 'atlassian_estimate_final_v7_newplan';
   
-  // Product Options
   const PRODUCTS = [
     "Jira Software",
     "Jira Service Management",
@@ -675,7 +689,6 @@
   });
 
   document.addEventListener('DOMContentLoaded', () => {
-    // 1. Listeners
     document.getElementById('calc-form').addEventListener('change', (e) => {
         if (e.target.matches('.section-toggle')) handleSectionToggle(e);
         if (e.target.matches('.task-item input[type="checkbox"]')) handleTaskToggle(e);
@@ -690,22 +703,16 @@
 
     document.getElementById('hourly-rate').addEventListener('input', recalculate);
 
-    // 2. Load
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
         try { restoreState(JSON.parse(saved)); } catch(e) { console.error(e); }
     } else {
-        // Default license row if empty
         addLicenseRow();
         recalculate();
     }
-    
-    // Initial Toggle State Check
     toggleServicesCostLogic();
   });
 
-  // --- Logic: UI Toggles ---
-  
   function toggleServicesCost() {
       toggleServicesCostLogic();
       recalculate();
@@ -720,8 +727,6 @@
           group.style.display = 'none';
       }
   }
-
-  // --- Logic: Sections & Tasks ---
 
   function handleSectionToggle(e) {
     const sectionId = e.target.getAttribute('data-target');
@@ -742,15 +747,10 @@
     else li.classList.add('excluded');
   }
 
-  // --- Logic: Calculations ---
-
   function recalculate() {
-    // 1. Services Calculation
     let totalHours = 0;
-    document.querySelectorAll('.section-card').forEach(card => {
-      // Skip license (11) and comment (12) sections for hours calculation
-      if(card.id === 'sec-11' || card.id === 'sec-12') return;
-
+    // Only sum sections marked as billable (sec-1 to sec-15)
+    document.querySelectorAll('.billable-section').forEach(card => {
       const toggle = card.querySelector('.section-toggle');
       if (toggle && toggle.checked) {
         const input = card.querySelector('.hours-input');
@@ -761,12 +761,9 @@
       }
     });
 
-    // 2. Licenses Calculation
     let totalLicenseCost = 0;
-    const licenseSection = document.getElementById('sec-11');
-    const isLicenseEnabled = licenseSection.querySelector('.section-toggle').checked;
-    
-    if (isLicenseEnabled) {
+    const licenseSection = document.getElementById('sec-license');
+    if (licenseSection && licenseSection.querySelector('.section-toggle').checked) {
         document.querySelectorAll('#license-rows tr').forEach(tr => {
             const count = parseInt(tr.querySelector('.count-input').value) || 0;
             const price = parseFloat(tr.querySelector('.price-input').value) || 0;
@@ -774,7 +771,6 @@
         });
     }
 
-    // 3. Totals
     const rate = parseFloat(document.getElementById('hourly-rate').value) || 0;
     const includeServiceCost = document.getElementById('toggle-services-cost').checked;
     
@@ -785,26 +781,21 @@
 
     const grandTotal = serviceCost + totalLicenseCost;
 
-    // 4. Update UI
     const totalHoursStr = totalHours.toFixed(1) + ' h';
     document.getElementById('total-hours').textContent = totalHoursStr;
     document.getElementById('service-cost').textContent = currencyFormatter.format(serviceCost);
     document.getElementById('license-cost').textContent = currencyFormatter.format(totalLicenseCost);
     document.getElementById('grand-total').textContent = currencyFormatter.format(grandTotal);
 
-    // Print attrs
     const container = document.getElementById('main-container');
-    container.setAttribute('data-print-hours', totalHoursStr); // Always set hours
+    container.setAttribute('data-print-hours', totalHoursStr);
     container.setAttribute('data-print-services', includeServiceCost ? currencyFormatter.format(serviceCost) : 'Excluded');
     container.setAttribute('data-print-licenses', currencyFormatter.format(totalLicenseCost));
     container.setAttribute('data-print-total', currencyFormatter.format(grandTotal));
     
-    // Also update license summary box
     updateLicenseSummaryBox();
     saveState();
   }
-
-  // --- Logic: License Calculator ---
 
   function addLicenseRow(data = null) {
     const tbody = document.getElementById('license-rows');
@@ -839,7 +830,7 @@
   function updateLicenseRow(input) {
       const tr = input.closest('tr');
       calculateRowTotal(tr);
-      recalculate(); // Updates sidebar totals
+      recalculate();
   }
 
   function calculateRowTotal(tr) {
@@ -857,7 +848,7 @@
   function updateLicenseSummaryBox() {
     const summary = {};
     const rows = document.querySelectorAll('#license-rows tr');
-    const isEnabled = document.getElementById('sec-11').querySelector('.section-toggle').checked;
+    const isEnabled = document.getElementById('sec-license').querySelector('.section-toggle').checked;
     
     if(!isEnabled) {
         document.getElementById('license-summary').innerHTML = '<span style="color:#6B778C; font-size:13px;">Section excluded</span>';
@@ -887,8 +878,6 @@
     }
   }
 
-  // --- State Management ---
-
   function gatherState() {
     const state = {
       clientName: document.getElementById('client-name').value,
@@ -899,7 +888,6 @@
       licenses: []
     };
 
-    // Sections
     document.querySelectorAll('.section-card').forEach(card => {
       const id = card.id;
       const secToggle = card.querySelector('.section-toggle');
@@ -915,7 +903,6 @@
       };
     });
 
-    // Licenses
     document.querySelectorAll('#license-rows tr').forEach(tr => {
         state.licenses.push({
             product: tr.querySelector('.product-select').value,
@@ -939,13 +926,11 @@
       if (state.rate) document.getElementById('hourly-rate').value = state.rate;
       if (state.comments) document.getElementById('global-comment').value = state.comments;
       
-      // Restore toggle
       if (state.includeServiceCost !== undefined) {
           document.getElementById('toggle-services-cost').checked = state.includeServiceCost;
           toggleServicesCostLogic();
       }
 
-      // Restore Sections
       if (state.sections) {
         Object.keys(state.sections).forEach(id => {
           const data = state.sections[id];
@@ -979,7 +964,6 @@
         });
       }
 
-      // Restore Licenses
       const tbody = document.getElementById('license-rows');
       tbody.innerHTML = ''; 
       if (state.licenses && state.licenses.length > 0) {
@@ -990,8 +974,6 @@
 
       recalculate();
   }
-
-  // --- Actions ---
 
   function exportData() {
     const state = gatherState();
