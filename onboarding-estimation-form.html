@@ -591,7 +591,12 @@
           <button type="button" class="btn-add-row" onclick="addLicenseRow()">+ Add Team</button>
           <div class="license-summary-box">
             <div class="license-summary-title">License Seat Summary</div>
-            <div class="license-summary-grid" id="license-summary"></div>
+            <div class="license-summary-grid" id="license-seat-summary"></div>
+            
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--ds-border);">
+                <div class="license-summary-title">License Cost Summary</div>
+                <div class="license-summary-grid" id="license-cost-summary"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -672,7 +677,7 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'atlassian_estimate_final_v7_newplan';
+  const STORAGE_KEY = 'atlassian_estimate_final_v8_costsummary';
   
   const PRODUCTS = [
     "Jira Software",
@@ -846,34 +851,53 @@
   }
 
   function updateLicenseSummaryBox() {
-    const summary = {};
+    const seatSummary = {};
+    const costSummary = {};
     const rows = document.querySelectorAll('#license-rows tr');
     const isEnabled = document.getElementById('sec-license').querySelector('.section-toggle').checked;
     
+    const seatContainer = document.getElementById('license-seat-summary');
+    const costContainer = document.getElementById('license-cost-summary');
+
     if(!isEnabled) {
-        document.getElementById('license-summary').innerHTML = '<span style="color:#6B778C; font-size:13px;">Section excluded</span>';
+        seatContainer.innerHTML = '<span style="color:#6B778C; font-size:13px;">Section excluded</span>';
+        costContainer.innerHTML = '';
         return;
     }
 
     rows.forEach(tr => {
         const prod = tr.querySelector('.product-select').value;
         const count = parseInt(tr.querySelector('.count-input').value) || 0;
+        const price = parseFloat(tr.querySelector('.price-input').value) || 0;
+        const total = count * price;
+
         if(count > 0) {
-            summary[prod] = (summary[prod] || 0) + count;
+            seatSummary[prod] = (seatSummary[prod] || 0) + count;
+            costSummary[prod] = (costSummary[prod] || 0) + total;
         }
     });
 
-    const container = document.getElementById('license-summary');
-    container.innerHTML = '';
-    
-    if (Object.keys(summary).length === 0) {
-        container.innerHTML = '<span style="color:#6B778C; font-size:13px;">No licenses added yet.</span>';
+    // Render Seats
+    seatContainer.innerHTML = '';
+    if (Object.keys(seatSummary).length === 0) {
+        seatContainer.innerHTML = '<span style="color:#6B778C; font-size:13px;">No licenses added yet.</span>';
     } else {
-        Object.keys(summary).forEach(prod => {
+        Object.keys(seatSummary).forEach(prod => {
             const div = document.createElement('div');
             div.className = 'license-tag';
-            div.innerHTML = `<span>${prod}</span> <strong>${summary[prod]}</strong>`;
-            container.appendChild(div);
+            div.innerHTML = `<span>${prod}</span> <strong>${seatSummary[prod]}</strong>`;
+            seatContainer.appendChild(div);
+        });
+    }
+
+    // Render Costs
+    costContainer.innerHTML = '';
+    if (Object.keys(costSummary).length > 0) {
+        Object.keys(costSummary).forEach(prod => {
+            const div = document.createElement('div');
+            div.className = 'license-tag';
+            div.innerHTML = `<span>${prod}</span> <strong>${currencyFormatter.format(costSummary[prod])}</strong>`;
+            costContainer.appendChild(div);
         });
     }
   }
