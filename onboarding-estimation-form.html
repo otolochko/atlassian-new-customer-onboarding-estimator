@@ -1,27 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <title>Implementation & License Estimation</title>
   <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik00LjE1OTUgMTMuNjM2NEw4Ljc5NTc3IDkuNDUyODZDOS4wNjAwNCA5LjIxNDQ0IDkuMzQ0NzIgOS4wMjg1NyA5LjY0MDYyIDkuMDI4NTdIOS42NTM5OEM5LjkzNjE0IDkuMDM0ODUgMTAuMjA0NyA5LjIwOTI2IDEwLjQ2MzIgOS40NDcyTDExLjk4OTUgMTkuNjM2NEg3LjE5NDc1QzYuMzY3OTYgMTkuNjM2NCA1LjU3NjY2IDE5LjMwNzMgNS4wMzA2NCAxOC43MzdMNC4wMjI4MyAxNy42ODU4QzMuMDc2NzUgMTYuNjk4NiAzLjEzNTk4IDE1LjE0MTMgNC4xNTk1IDEzLjYzNjRWTTEzLjUzNjggNC4zNjM2NEw4LjkwMDUxIDguNTQ3MTRDOC42MzYyMyA4Ljc4NTU2IDguMzUxNTUgOC45NzE0MyA4LjA1NTY1IDguOTcxNDNIODuMDQyMjlDNy43NjAxMiA4Ljk2NTE1IDcuNDkxNTcgOC43OTA3NCA3LjIzMzE0IDguNTUyOEw1LjcwNjg0IDAuMzYzNjM2SDE2LjgwNTJDMjEuMTk0MSAwLjM2MzYzNiAyNC41NzM1IDQuMzQyMDUgMjMuNzY2NyA4LjY0OTg2QzIzLjY0NzkgOS4yODQzMyAyMy40ODUzIDkuODU0NCAyMy4yNzc1IDEwLjM2MzZIMTMuNTM2OFY0LjM2MzY0Wk0xNS45ODk1IDE5LjYzNjRMMTEuMzUzMyAxNS40NTI5QzExLjA4OSAxNS4yMTQ0IDEwLjgwNDMgMTUuMDI4NiAxMC41MDgzIDE1LjAyODZIMTAuNDk1QzEwLjIxMjggMTUuMDM0OCA5Ljk0NDI4IDE1LjIwOTMgOS42ODU3NCAxNS40NDcyTDguMTU5NTEgMTkuNjM2NEgxNS45ODk1WiIgZmlsbD0iIzAwNTJDQyIvPgo8L3N2Zz4=">
   <style>
     :root {
-      /* --- Atlassian Design Tokens --- */
+      /* --- Light Mode Tokens --- */
       --ds-surface: #FFFFFF;
       --ds-surface-sunken: #F7F8F9;
+      --ds-surface-overlay: #FFFFFF;
       --ds-background-input: #F4F5F7;
+      --ds-background-input-hovered: #EBECF0;
       --ds-background-input-pressed: #FFFFFF;
+      
       --ds-text: #172B4D;
       --ds-text-subtle: #626F86;
+      --ds-link: #0C66E4;
+      
       --ds-border: #DCDFE4;
+      --ds-border-input: transparent;
       --ds-border-focused: #388BFF;
+      
       --ds-background-brand-bold: #0C66E4;
+      --ds-background-brand-bold-hovered: #0055CC; /* Darker blue for hover */
+      
       --ds-background-success-bold: #36B37E;
       --ds-background-danger-bold: #CA3521;
       
       --ds-shadow-card: 0px 1px 1px rgba(9, 30, 66, 0.25), 0px 0px 1px 1px rgba(9, 30, 66, 0.13);
-      --ds-radius: 3px;
-      --sidebar-width: 320px;
+      
+      --logo-color: #0C66E4;
+    }
+
+    [data-theme="dark"] {
+      /* --- Dark Mode Tokens (Atlassian Dark) --- */
+      --ds-surface: #22272B;
+      --ds-surface-sunken: #1D2125;
+      --ds-surface-overlay: #282E33;
+      --ds-background-input: #22272B;
+      --ds-background-input-hovered: #2C333A;
+      --ds-background-input-pressed: #22272B;
+      
+      --ds-text: #B6C2CF;
+      --ds-text-subtle: #8C9BAB;
+      --ds-link: #579DFF;
+      
+      --ds-border: #454F59;
+      --ds-border-input: #454F59;
+      --ds-border-focused: #579DFF;
+      
+      --ds-background-brand-bold: #579DFF;
+      --ds-background-brand-bold-hovered: #85B8FF;
+      
+      --ds-background-success-bold: #216E4E;
+      --ds-background-danger-bold: #AE2A19;
+      
+      --ds-shadow-card: 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 0px 1px 1px rgba(0, 0, 0, 0.5);
+      
+      --logo-color: #579DFF;
     }
 
     * { box-sizing: border-box; }
@@ -33,6 +70,7 @@
       margin: 0;
       padding: 0;
       line-height: 1.5;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     /* --- Header --- */
@@ -44,6 +82,7 @@
       top: 0;
       z-index: 100;
       box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+      transition: background-color 0.3s, border-color 0.3s;
     }
 
     .header-content {
@@ -54,12 +93,39 @@
       align-items: flex-end;
     }
 
+    .header-left-group {
+      display: flex;
+      flex-direction: column;
+    }
+
     .header-titles h1 {
       margin: 0;
       font-size: 24px;
       font-weight: 500;
       color: var(--ds-text);
     }
+
+    .header-actions {
+      display: flex;
+      align-items: flex-end;
+      gap: 20px;
+    }
+
+    .theme-toggle-btn {
+      background: transparent;
+      border: 1px solid var(--ds-border);
+      color: var(--ds-text);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all 0.2s;
+    }
+    .theme-toggle-btn:hover { background: var(--ds-background-input-hovered); }
 
     .client-input-group {
       display: flex;
@@ -80,7 +146,7 @@
       padding: 4px 8px;
       border: 1px solid transparent;
       background: transparent;
-      border-radius: var(--ds-radius);
+      border-radius: 3px;
       color: var(--ds-text);
       font-weight: 500;
       text-align: right;
@@ -89,7 +155,7 @@
     }
     
     .client-name-input:hover { background: var(--ds-background-input); }
-    .client-name-input:focus { background: #fff; border-color: var(--ds-border-focused); outline: none; }
+    .client-name-input:focus { background: var(--ds-surface); border-color: var(--ds-border-focused); outline: none; }
 
     /* --- Layout --- */
     .app-container {
@@ -100,12 +166,14 @@
       grid-template-columns: 1fr var(--sidebar-width);
       gap: 32px;
       align-items: start;
+      --sidebar-width: 320px;
     }
 
     @media (max-width: 960px) {
       .app-container { grid-template-columns: 1fr; padding: 20px; }
       header { position: static; }
       .header-content { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .header-actions { width: 100%; justify-content: space-between; align-items: center; }
       .client-input-group { align-items: flex-start; width: 100%; }
       .client-name-input { text-align: left; width: 100%; }
     }
@@ -118,14 +186,14 @@
       color: var(--ds-text-subtle);
       margin: 32px 0 12px 0;
       padding-bottom: 8px;
-      border-bottom: 2px solid #EBECF0;
+      border-bottom: 2px solid var(--ds-border);
       display: flex;
       align-items: center;
       gap: 8px;
     }
     .phase-header:first-of-type { margin-top: 0; }
     .phase-badge {
-        background: #EBECF0;
+        background: var(--ds-border);
         color: var(--ds-text);
         padding: 2px 6px;
         border-radius: 3px;
@@ -136,16 +204,19 @@
 
     .section-card {
       background: var(--ds-surface);
-      border-radius: var(--ds-radius);
+      border-radius: 3px;
       box-shadow: var(--ds-shadow-card);
-      transition: box-shadow 0.2s;
+      transition: background-color 0.3s, box-shadow 0.2s;
       border: 1px solid transparent;
     }
-    .section-card:hover { box-shadow: 0px 4px 8px rgba(9, 30, 66, 0.25), 0px 0px 1px rgba(9, 30, 66, 0.31); }
+    /* Dark mode needs explicit border for contrast */
+    [data-theme="dark"] .section-card { border: 1px solid var(--ds-border); }
+    
+    .section-card:hover { box-shadow: 0px 4px 8px rgba(0,0,0,0.2); }
 
     .section-disabled {
-      opacity: 0.6;
-      background-color: rgba(255,255,255, 0.5);
+      opacity: 0.5;
+      background-color: var(--ds-surface-sunken);
       box-shadow: none;
       border: 1px solid var(--ds-border);
     }
@@ -171,28 +242,39 @@
       justify-content: center;
       border-radius: 50%;
     }
-    .section-title { font-size: 16px; font-weight: 600; }
+    [data-theme="dark"] .section-badge { background: var(--ds-text); color: var(--ds-surface-sunken); }
+
+    .section-title { font-size: 16px; font-weight: 600; color: var(--ds-text); }
     .section-body { padding: 20px 24px; }
     .section-body-disabled { pointer-events: none; filter: grayscale(1); }
 
     /* --- Tasks --- */
     .tasks-list { list-style: none; padding: 0; margin: 0 0 24px 0; }
-    .task-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; font-size: 14px; }
+    .task-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; font-size: 14px; color: var(--ds-text); }
     .task-item.excluded { text-decoration: line-through; color: var(--ds-text-subtle); }
 
     input[type="checkbox"] {
-      appearance: none; width: 16px; height: 16px; border: 2px solid #DFE1E6; background: #FAFBFC; border-radius: 3px; margin-top: 3px; cursor: pointer; flex-shrink: 0;
+      appearance: none; width: 16px; height: 16px; 
+      border: 2px solid var(--ds-border); 
+      background: var(--ds-background-input); 
+      border-radius: 3px; margin-top: 3px; cursor: pointer; flex-shrink: 0;
     }
     input[type="checkbox"]:checked { background: var(--ds-background-brand-bold); border-color: var(--ds-background-brand-bold); }
-    input[type="checkbox"]:checked::after { content: ''; position: absolute; margin: 1px 0 0 4px; width: 4px; height: 8px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+    input[type="checkbox"]:checked::after { content: ''; position: absolute; margin: 1px 0 0 4px; width: 4px; height: 8px; border: solid var(--ds-surface); border-width: 0 2px 2px 0; transform: rotate(45deg); }
 
     /* --- License Table Styles --- */
     .license-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px; }
     .license-table th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--ds-text-subtle); border-bottom: 2px solid var(--ds-border); padding: 8px 4px; }
-    .license-table td { padding: 8px 4px; border-bottom: 1px solid var(--ds-border); vertical-align: top; }
+    .license-table td { padding: 8px 4px; border-bottom: 1px solid var(--ds-border); vertical-align: top; color: var(--ds-text); }
 
-    .license-input, .license-select { width: 100%; padding: 6px 8px; border: 1px solid var(--ds-border); background: var(--ds-background-input); border-radius: 3px; font-family: inherit; font-size: 13px; }
-    .license-input:focus, .license-select:focus { background: #fff; border-color: var(--ds-border-focused); outline: none; }
+    .license-input, .license-select { 
+      width: 100%; padding: 6px 8px; 
+      border: 1px solid var(--ds-border); 
+      background: var(--ds-background-input); 
+      color: var(--ds-text);
+      border-radius: 3px; font-family: inherit; font-size: 13px; 
+    }
+    .license-input:focus, .license-select:focus { background: var(--ds-surface); border-color: var(--ds-border-focused); outline: none; }
 
     .row-total-cell { font-weight: 600; text-align: right; padding-top: 14px; color: var(--ds-text); }
 
@@ -202,22 +284,25 @@
     .btn-remove-row { color: var(--ds-text-subtle); background: transparent; width: 24px; height: 24px; padding: 0; font-size: 18px; line-height: 1; }
     .btn-remove-row:hover { color: var(--ds-background-danger-bold); background: transparent; }
 
-    .license-summary-box { margin-top: 20px; padding: 16px; background: var(--ds-surface-sunken); border-radius: 3px; }
+    .license-summary-box { margin-top: 20px; padding: 16px; background: var(--ds-surface-sunken); border-radius: 3px; border: 1px solid var(--ds-border); }
     .license-summary-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--ds-text-subtle); margin-bottom: 8px; }
     .license-summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
-    .license-tag { display: flex; justify-content: space-between; font-size: 13px; background: #fff; padding: 4px 8px; border-radius: 3px; border: 1px solid var(--ds-border); }
+    .license-tag { display: flex; justify-content: space-between; font-size: 13px; background: var(--ds-surface); color: var(--ds-text); padding: 4px 8px; border-radius: 3px; border: 1px solid var(--ds-border); }
 
     /* --- Big Textarea --- */
-    .global-comment-area { width: 100%; min-height: 120px; padding: 12px; border: 1px solid var(--ds-border); background: var(--ds-background-input); border-radius: var(--ds-radius); font-family: inherit; font-size: 14px; line-height: 1.5; color: var(--ds-text); resize: vertical; }
-    .global-comment-area:focus { background: #fff; border-color: var(--ds-border-focused); outline: none; }
+    .global-comment-area { width: 100%; min-height: 120px; padding: 12px; border: 1px solid var(--ds-border); background: var(--ds-background-input); color: var(--ds-text); border-radius: 3px; font-family: inherit; font-size: 14px; line-height: 1.5; resize: vertical; }
+    .global-comment-area:focus { background: var(--ds-surface); border-color: var(--ds-border-focused); outline: none; }
 
     /* --- Sidebar --- */
     aside { position: sticky; top: 110px; }
-    .summary-panel { background: var(--ds-surface); border-radius: var(--ds-radius); box-shadow: var(--ds-shadow-card); overflow: hidden; }
+    .summary-panel { background: var(--ds-surface); border-radius: 3px; box-shadow: var(--ds-shadow-card); overflow: hidden; border: 1px solid transparent; }
+    [data-theme="dark"] .summary-panel { border: 1px solid var(--ds-border); }
+
     .summary-header { padding: 16px 20px; background: var(--ds-surface-sunken); border-bottom: 1px solid var(--ds-border); }
     .summary-header h2 { margin: 0; font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--ds-text-subtle); }
     .summary-body { padding: 24px 20px; }
-    .summary-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; font-size: 14px; }
+    
+    .summary-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; font-size: 14px; color: var(--ds-text); }
     .summary-row.total { margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--ds-border); }
     .summary-label { color: var(--ds-text-subtle); }
     .summary-value { font-weight: 600; color: var(--ds-text); }
@@ -227,40 +312,55 @@
     /* Buttons */
     .actions { padding: 16px 20px; background: var(--ds-surface-sunken); border-top: 1px solid var(--ds-border); display: flex; flex-direction: column; gap: 8px; }
     button { display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 0 12px; border-radius: 3px; border: none; font-weight: 500; font-size: 14px; cursor: pointer; transition: background 0.1s; width: 100%; }
-    button.primary { background: var(--ds-background-brand-bold); color: white; }
-    button.primary:hover { background: var(--ds-background-brand-bold-hovered); }
-    button.secondary { background: rgba(9, 30, 66, 0.04); color: var(--ds-text); }
-    button.secondary:hover { background: rgba(9, 30, 66, 0.08); }
-    button.ghost { background: transparent; color: var(--ds-text-subtle); }
-    button.ghost:hover { color: #CA3521; }
+    
+    button.primary { background: var(--ds-background-brand-bold); color: #FFFFFF; } /* Fixed text color for dark mode */
+    button.primary:hover { background: var(--ds-background-brand-bold-hovered); color: #FFFFFF; } /* Fixed Hover */
 
-    /* Inputs & Toggles */
-    input.hours-input { width: 80px; text-align: right; padding: 6px 8px; border: 1px solid transparent; background: var(--ds-background-input); border-radius: 3px; }
-    input.hours-input:focus { background: #fff; border-color: var(--ds-border-focused); outline: none; }
+    button.secondary { background: rgba(9, 30, 66, 0.04); color: var(--ds-text); }
+    [data-theme="dark"] button.secondary { background: rgba(255, 255, 255, 0.05); }
+    button.secondary:hover { background: rgba(9, 30, 66, 0.08); }
+    [data-theme="dark"] button.secondary:hover { background: rgba(255, 255, 255, 0.1); }
+
+    button.ghost { background: transparent; color: var(--ds-text-subtle); }
+    button.ghost:hover { color: var(--ds-background-danger-bold); }
+
+    /* Inputs */
+    input.hours-input { width: 80px; text-align: right; padding: 6px 8px; border: 1px solid transparent; background: var(--ds-background-input); color: var(--ds-text); border-radius: 3px; }
+    input.hours-input:focus { background: var(--ds-surface); border-color: var(--ds-border-focused); outline: none; }
     .estimation-row { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; border-top: 1px solid var(--ds-border); }
+    
+    /* Toggle */
     .switch { position: relative; display: inline-block; width: 32px; height: 16px; }
     .switch input { opacity: 0; width: 0; height: 0; }
     .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #6B778C; transition: .2s; border-radius: 16px; }
     .slider:before { position: absolute; content: ""; height: 12px; width: 12px; left: 2px; bottom: 2px; background-color: white; transition: .2s; border-radius: 50%; }
     input:checked + .slider { background-color: var(--ds-background-success-bold); }
     input:checked + .slider:before { transform: translateX(16px); }
+    
     #file-input { display: none; }
 
-    /* Print */
+    /* Print Styles */
     @media print {
-      body { background: white; padding: 0; }
-      header { position: static; box-shadow: none; border-bottom: 2px solid #000; }
-      .client-input-group label { display: block; }
-      .client-name-input { border: none; padding: 0; text-align: right; font-weight: bold; width: auto; }
+      body { background: white; color: black; padding: 0; }
+      [data-theme="dark"] { --ds-text: black; --ds-text-subtle: #666; --ds-border: #ccc; } /* Force light vars for print */
+      
+      header { position: static; box-shadow: none; border-bottom: 2px solid #000; background: white; }
+      .header-actions { display: none; } /* Hide dark mode toggle on print */
+      
+      .client-input-group label { display: block; color: #000; }
+      .client-name-input { border: none; padding: 0; text-align: right; font-weight: bold; width: auto; color: #000; }
+      
       .app-container { display: block; padding: 0; margin: 20px 0; }
       aside { display: none; }
-      .section-card { box-shadow: none; border: 1px solid #ccc; margin-bottom: 20px; page-break-inside: avoid; }
+      
+      .section-card { box-shadow: none; border: 1px solid #ccc; margin-bottom: 20px; page-break-inside: avoid; background: white; }
       .section-disabled, .task-item.excluded { display: none; }
-      input, select, textarea { border: none; background: transparent; resize: none; appearance: none; padding: 0;}
+      
+      input, select, textarea { border: none; background: transparent; resize: none; appearance: none; padding: 0; color: black; }
+      
       .btn-add-row, .btn-remove-row { display: none; }
       .global-comment-area { border: none; padding: 0; background: transparent; height: auto; min-height: auto; }
       
-      /* HIDE Phase Headers on Print */
       .no-print { display: none !important; }
 
       .app-container::after {
@@ -274,13 +374,22 @@
 
 <header>
   <div class="header-content">
-    <div class="header-titles">
-      <h1>Implementation Estimation</h1>
-      <p style="margin: 4px 0 0; font-size: 14px; color: #626F86;">Scope & License Planner</p>
+    <div class="header-left-group">
+      <div class="header-titles">
+        <h1>Implementation Estimation</h1>
+        <p style="margin: 4px 0 0; font-size: 14px; color: var(--ds-text-subtle);">Scope & License Planner</p>
+      </div>
     </div>
-    <div class="client-input-group">
-      <label for="client-name">Customer</label>
-      <input type="text" id="client-name" class="client-name-input" placeholder="Enter customer name...">
+    
+    <div class="header-actions">
+      <div class="client-input-group">
+        <label for="client-name">Customer</label>
+        <input type="text" id="client-name" class="client-name-input" placeholder="Enter customer name...">
+      </div>
+      
+      <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+        <span id="theme-icon">☀</span>
+      </button>
     </div>
   </div>
 </header>
@@ -567,9 +676,9 @@
       </div>
 
       <div class="section-card" id="sec-license">
-        <div class="section-header" style="background-color: #DEEBFF; border-bottom-color: #B3D4FF;">
+        <div class="section-header" style="background-color: var(--ds-surface-sunken); border-bottom: 2px solid var(--ds-border-focused);">
           <div class="header-left">
-            <span class="section-title" style="color:#0052CC;">License Planning</span>
+            <span class="section-title" style="color: var(--ds-link);">License Planning</span>
           </div>
           <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-license"><span class="slider"></span></label>
         </div>
@@ -589,6 +698,7 @@
             <tbody id="license-rows"></tbody>
           </table>
           <button type="button" class="btn-add-row" onclick="addLicenseRow()">+ Add Team</button>
+          
           <div class="license-summary-box">
             <div class="license-summary-title">License Seat Summary</div>
             <div class="license-summary-grid" id="license-seat-summary"></div>
@@ -638,11 +748,11 @@
         </div>
         
         <div id="service-cost-group">
-            <div class="rate-row" style="margin-bottom:12px;">
+            <div class="rate-row" style="margin-bottom:12px; display: flex; justify-content: space-between; align-items: center;">
               <span class="summary-label" style="font-size:12px;">Hourly Rate</span>
-              <input type="number" id="hourly-rate" value="100" style="width: 70px; text-align:right; border:1px solid #DCDFE4; border-radius:3px; padding:2px 4px; font-size:12px;">
+              <input type="number" id="hourly-rate" value="100" style="width: 70px; text-align:right; border:1px solid var(--ds-border); background: var(--ds-background-input); color: var(--ds-text); border-radius:3px; padding:2px 4px; font-size:12px;">
             </div>
-            <div class="summary-row" style="border-bottom: 1px solid #DCDFE4; padding-bottom:12px; margin-bottom:16px;">
+            <div class="summary-row" style="border-bottom: 1px solid var(--ds-border); padding-bottom:12px; margin-bottom:16px;">
               <span class="summary-label">Services Cost</span>
               <span class="summary-value cost-main" id="service-cost">$0</span>
             </div>
@@ -665,7 +775,7 @@
         <a href="https://www.atlassian.com/software/pricing-calculator" target="_blank" style="text-decoration: none; width: 100%;">
             <button class="secondary" type="button">Atlassian Pricing Calculator ↗</button>
         </a>
-        <div style="height: 1px; background: #DCDFE4; margin: 4px 0;"></div>
+        <div style="height: 1px; background: var(--ds-border); margin: 4px 0;"></div>
         <button class="secondary" onclick="exportData()">Export JSON</button>
         <button class="secondary" onclick="document.getElementById('file-input').click()">Import JSON</button>
         <button class="ghost" onclick="resetDefaults()">Reset to Defaults</button>
@@ -677,7 +787,7 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'atlassian_estimate_final_v8_costsummary';
+  const STORAGE_KEY = 'atlassian_estimate_final_v10_dark';
   
   const PRODUCTS = [
     "Jira Software",
@@ -693,10 +803,30 @@
       style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0,
   });
 
+  // --- Theme Logic ---
+  function toggleTheme() {
+    const html = document.documentElement;
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    document.getElementById('theme-icon').textContent = next === 'dark' ? '☾' : '☀';
+    localStorage.setItem('theme_preference', next);
+  }
+
+  function loadTheme() {
+    const saved = localStorage.getItem('theme_preference') || 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+    document.getElementById('theme-icon').textContent = saved === 'dark' ? '☾' : '☀';
+  }
+
+  // --- Main Init ---
   document.addEventListener('DOMContentLoaded', () => {
+    loadTheme();
+
     document.getElementById('calc-form').addEventListener('change', (e) => {
         if (e.target.matches('.section-toggle')) handleSectionToggle(e);
         if (e.target.matches('.task-item input[type="checkbox"]')) handleTaskToggle(e);
+        if (e.target.matches('.license-input') || e.target.matches('.license-select')) updateLicenseRow(e.target);
         recalculate();
     });
 
@@ -726,11 +856,7 @@
   function toggleServicesCostLogic() {
       const isChecked = document.getElementById('toggle-services-cost').checked;
       const group = document.getElementById('service-cost-group');
-      if(isChecked) {
-          group.style.display = 'block';
-      } else {
-          group.style.display = 'none';
-      }
+      group.style.display = isChecked ? 'block' : 'none';
   }
 
   function handleSectionToggle(e) {
@@ -754,7 +880,7 @@
 
   function recalculate() {
     let totalHours = 0;
-    // Only sum sections marked as billable (sec-1 to sec-15)
+    // Sum only billable sections 1-15
     document.querySelectorAll('.billable-section').forEach(card => {
       const toggle = card.querySelector('.section-toggle');
       if (toggle && toggle.checked) {
@@ -834,7 +960,7 @@
 
   function updateLicenseRow(input) {
       const tr = input.closest('tr');
-      calculateRowTotal(tr);
+      if(tr) calculateRowTotal(tr);
       recalculate();
   }
 
@@ -860,7 +986,7 @@
     const costContainer = document.getElementById('license-cost-summary');
 
     if(!isEnabled) {
-        seatContainer.innerHTML = '<span style="color:#6B778C; font-size:13px;">Section excluded</span>';
+        seatContainer.innerHTML = '<span style="color:var(--ds-text-subtle); font-size:13px;">Section excluded</span>';
         costContainer.innerHTML = '';
         return;
     }
@@ -880,7 +1006,7 @@
     // Render Seats
     seatContainer.innerHTML = '';
     if (Object.keys(seatSummary).length === 0) {
-        seatContainer.innerHTML = '<span style="color:#6B778C; font-size:13px;">No licenses added yet.</span>';
+        seatContainer.innerHTML = '<span style="color:var(--ds-text-subtle); font-size:13px;">No licenses added yet.</span>';
     } else {
         Object.keys(seatSummary).forEach(prod => {
             const div = document.createElement('div');
