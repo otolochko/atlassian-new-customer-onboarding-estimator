@@ -9,56 +9,36 @@
       /* --- Light Mode Tokens --- */
       --ds-surface: #FFFFFF;
       --ds-surface-sunken: #F7F8F9;
-      --ds-surface-overlay: #FFFFFF;
       --ds-background-input: #F4F5F7;
       --ds-background-input-hovered: #EBECF0;
-      --ds-background-input-pressed: #FFFFFF;
-      
       --ds-text: #172B4D;
       --ds-text-subtle: #626F86;
       --ds-link: #0C66E4;
-      
       --ds-border: #DCDFE4;
-      --ds-border-input: transparent;
       --ds-border-focused: #388BFF;
-      
       --ds-background-brand-bold: #0C66E4;
-      --ds-background-brand-bold-hovered: #0055CC; /* Darker blue for hover */
-      
+      --ds-background-brand-bold-hovered: #0055CC;
       --ds-background-success-bold: #36B37E;
       --ds-background-danger-bold: #CA3521;
-      
       --ds-shadow-card: 0px 1px 1px rgba(9, 30, 66, 0.25), 0px 0px 1px 1px rgba(9, 30, 66, 0.13);
-      
-      --logo-color: #0C66E4;
+      --sidebar-width: 320px;
     }
 
     [data-theme="dark"] {
-      /* --- Dark Mode Tokens (Atlassian Dark) --- */
       --ds-surface: #22272B;
       --ds-surface-sunken: #1D2125;
-      --ds-surface-overlay: #282E33;
       --ds-background-input: #22272B;
       --ds-background-input-hovered: #2C333A;
-      --ds-background-input-pressed: #22272B;
-      
       --ds-text: #B6C2CF;
       --ds-text-subtle: #8C9BAB;
       --ds-link: #579DFF;
-      
       --ds-border: #454F59;
-      --ds-border-input: #454F59;
       --ds-border-focused: #579DFF;
-      
       --ds-background-brand-bold: #579DFF;
       --ds-background-brand-bold-hovered: #85B8FF;
-      
       --ds-background-success-bold: #216E4E;
       --ds-background-danger-bold: #AE2A19;
-      
       --ds-shadow-card: 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 0px 1px 1px rgba(0, 0, 0, 0.5);
-      
-      --logo-color: #579DFF;
     }
 
     * { box-sizing: border-box; }
@@ -82,7 +62,6 @@
       top: 0;
       z-index: 100;
       box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-      transition: background-color 0.3s, border-color 0.3s;
     }
 
     .header-content {
@@ -95,7 +74,17 @@
 
     .header-left-group {
       display: flex;
-      flex-direction: column;
+      align-items: center; 
+      gap: 12px;
+    }
+
+    /* FIXED: Using IMG tag for logo */
+    .atlassian-logo {
+      width: 32px;
+      height: 32px;
+      object-fit: contain; /* Ensures the PNG fits nicely */
+      flex-shrink: 0;
+      display: block;
     }
 
     .header-titles h1 {
@@ -103,57 +92,29 @@
       font-size: 24px;
       font-weight: 500;
       color: var(--ds-text);
+      line-height: 1.2;
     }
 
-    .header-actions {
-      display: flex;
-      align-items: flex-end;
-      gap: 20px;
-    }
+    .header-actions { display: flex; align-items: flex-end; gap: 20px; }
 
     .theme-toggle-btn {
       background: transparent;
       border: 1px solid var(--ds-border);
       color: var(--ds-text);
-      width: 36px;
-      height: 36px;
+      width: 36px; height: 36px;
       border-radius: 50%;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 18px;
-      transition: all 0.2s;
     }
     .theme-toggle-btn:hover { background: var(--ds-background-input-hovered); }
 
-    .client-input-group {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 4px;
-    }
-    
-    .client-input-group label {
-      font-size: 11px;
-      text-transform: uppercase;
-      font-weight: 700;
-      color: var(--ds-text-subtle);
-    }
+    .client-input-group { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+    .client-input-group label { font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--ds-text-subtle); }
 
     .client-name-input {
-      font-size: 18px;
-      padding: 4px 8px;
-      border: 1px solid transparent;
-      background: transparent;
-      border-radius: 3px;
-      color: var(--ds-text);
-      font-weight: 500;
-      text-align: right;
-      width: 300px;
-      transition: all 0.2s;
+      font-size: 18px; padding: 4px 8px; border: 1px solid transparent; background: transparent; border-radius: 3px; color: var(--ds-text); font-weight: 500; text-align: right; width: 300px; transition: all 0.2s;
     }
-    
     .client-name-input:hover { background: var(--ds-background-input); }
     .client-name-input:focus { background: var(--ds-surface); border-color: var(--ds-border-focused); outline: none; }
 
@@ -166,7 +127,6 @@
       grid-template-columns: 1fr var(--sidebar-width);
       gap: 32px;
       align-items: start;
-      --sidebar-width: 320px;
     }
 
     @media (max-width: 960px) {
@@ -180,68 +140,26 @@
 
     /* --- Phase Headers --- */
     .phase-header {
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: var(--ds-text-subtle);
-      margin: 32px 0 12px 0;
-      padding-bottom: 8px;
-      border-bottom: 2px solid var(--ds-border);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--ds-text-subtle); margin: 32px 0 12px 0; padding-bottom: 8px; border-bottom: 2px solid var(--ds-border); display: flex; align-items: center; gap: 8px;
     }
     .phase-header:first-of-type { margin-top: 0; }
-    .phase-badge {
-        background: var(--ds-border);
-        color: var(--ds-text);
-        padding: 2px 6px;
-        border-radius: 3px;
-    }
+    .phase-badge { background: var(--ds-border); color: var(--ds-text); padding: 2px 6px; border-radius: 3px; }
 
     /* --- Cards --- */
     .sections-wrapper { display: flex; flex-direction: column; gap: 16px; }
 
     .section-card {
-      background: var(--ds-surface);
-      border-radius: 3px;
-      box-shadow: var(--ds-shadow-card);
-      transition: background-color 0.3s, box-shadow 0.2s;
-      border: 1px solid transparent;
+      background: var(--ds-surface); border-radius: 3px; box-shadow: var(--ds-shadow-card); transition: background-color 0.3s, box-shadow 0.2s; border: 1px solid transparent;
     }
-    /* Dark mode needs explicit border for contrast */
     [data-theme="dark"] .section-card { border: 1px solid var(--ds-border); }
-    
     .section-card:hover { box-shadow: 0px 4px 8px rgba(0,0,0,0.2); }
 
-    .section-disabled {
-      opacity: 0.5;
-      background-color: var(--ds-surface-sunken);
-      box-shadow: none;
-      border: 1px solid var(--ds-border);
-    }
+    .section-disabled { opacity: 0.5; background-color: var(--ds-surface-sunken); box-shadow: none; border: 1px solid var(--ds-border); }
 
-    .section-header {
-      padding: 16px 24px;
-      border-bottom: 1px solid var(--ds-border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
+    .section-header { padding: 16px 24px; border-bottom: 1px solid var(--ds-border); display: flex; justify-content: space-between; align-items: center; }
     .header-left { display: flex; align-items: center; gap: 12px; }
-    .section-badge {
-      background: var(--ds-text);
-      color: var(--ds-surface);
-      font-size: 12px;
-      font-weight: 700;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-    }
+    
+    .section-badge { background: var(--ds-text); color: var(--ds-surface); font-size: 12px; font-weight: 700; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
     [data-theme="dark"] .section-badge { background: var(--ds-text); color: var(--ds-surface-sunken); }
 
     .section-title { font-size: 16px; font-weight: 600; color: var(--ds-text); }
@@ -254,42 +172,32 @@
     .task-item.excluded { text-decoration: line-through; color: var(--ds-text-subtle); }
 
     input[type="checkbox"] {
-      appearance: none; width: 16px; height: 16px; 
-      border: 2px solid var(--ds-border); 
-      background: var(--ds-background-input); 
-      border-radius: 3px; margin-top: 3px; cursor: pointer; flex-shrink: 0;
+      appearance: none; width: 16px; height: 16px; border: 2px solid var(--ds-border); background: var(--ds-background-input); border-radius: 3px; margin-top: 3px; cursor: pointer; flex-shrink: 0;
     }
     input[type="checkbox"]:checked { background: var(--ds-background-brand-bold); border-color: var(--ds-background-brand-bold); }
     input[type="checkbox"]:checked::after { content: ''; position: absolute; margin: 1px 0 0 4px; width: 4px; height: 8px; border: solid var(--ds-surface); border-width: 0 2px 2px 0; transform: rotate(45deg); }
 
-    /* --- License Table Styles --- */
+    /* --- License Table --- */
     .license-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px; }
     .license-table th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--ds-text-subtle); border-bottom: 2px solid var(--ds-border); padding: 8px 4px; }
     .license-table td { padding: 8px 4px; border-bottom: 1px solid var(--ds-border); vertical-align: top; color: var(--ds-text); }
 
-    .license-input, .license-select { 
-      width: 100%; padding: 6px 8px; 
-      border: 1px solid var(--ds-border); 
-      background: var(--ds-background-input); 
-      color: var(--ds-text);
-      border-radius: 3px; font-family: inherit; font-size: 13px; 
-    }
+    .license-input, .license-select { width: 100%; padding: 6px 8px; border: 1px solid var(--ds-border); background: var(--ds-background-input); color: var(--ds-text); border-radius: 3px; font-family: inherit; font-size: 13px; }
     .license-input:focus, .license-select:focus { background: var(--ds-surface); border-color: var(--ds-border-focused); outline: none; }
 
     .row-total-cell { font-weight: 600; text-align: right; padding-top: 14px; color: var(--ds-text); }
 
     .btn-add-row { background: transparent; color: var(--ds-background-brand-bold); font-weight: 500; padding: 0; text-align: left; width: auto; justify-content: flex-start; }
-    .btn-add-row:hover { background: transparent; text-decoration: underline; }
-
+    .btn-add-row:hover { text-decoration: underline; }
+    
     .btn-remove-row { color: var(--ds-text-subtle); background: transparent; width: 24px; height: 24px; padding: 0; font-size: 18px; line-height: 1; }
-    .btn-remove-row:hover { color: var(--ds-background-danger-bold); background: transparent; }
+    .btn-remove-row:hover { color: var(--ds-background-danger-bold); }
 
     .license-summary-box { margin-top: 20px; padding: 16px; background: var(--ds-surface-sunken); border-radius: 3px; border: 1px solid var(--ds-border); }
     .license-summary-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--ds-text-subtle); margin-bottom: 8px; }
     .license-summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
     .license-tag { display: flex; justify-content: space-between; font-size: 13px; background: var(--ds-surface); color: var(--ds-text); padding: 4px 8px; border-radius: 3px; border: 1px solid var(--ds-border); }
 
-    /* --- Big Textarea --- */
     .global-comment-area { width: 100%; min-height: 120px; padding: 12px; border: 1px solid var(--ds-border); background: var(--ds-background-input); color: var(--ds-text); border-radius: 3px; font-family: inherit; font-size: 14px; line-height: 1.5; resize: vertical; }
     .global-comment-area:focus { background: var(--ds-surface); border-color: var(--ds-border-focused); outline: none; }
 
@@ -306,15 +214,13 @@
     .summary-row.total { margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--ds-border); }
     .summary-label { color: var(--ds-text-subtle); }
     .summary-value { font-weight: 600; color: var(--ds-text); }
-    .cost-main { font-size: 16px; }
     .cost-total { font-size: 20px; color: var(--ds-background-brand-bold); font-weight: 700; }
 
-    /* Buttons */
     .actions { padding: 16px 20px; background: var(--ds-surface-sunken); border-top: 1px solid var(--ds-border); display: flex; flex-direction: column; gap: 8px; }
     button { display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 0 12px; border-radius: 3px; border: none; font-weight: 500; font-size: 14px; cursor: pointer; transition: background 0.1s; width: 100%; }
     
-    button.primary { background: var(--ds-background-brand-bold); color: #FFFFFF; } /* Fixed text color for dark mode */
-    button.primary:hover { background: var(--ds-background-brand-bold-hovered); color: #FFFFFF; } /* Fixed Hover */
+    button.primary { background: var(--ds-background-brand-bold); color: #FFFFFF; }
+    button.primary:hover { background: var(--ds-background-brand-bold-hovered); color: #FFFFFF; }
 
     button.secondary { background: rgba(9, 30, 66, 0.04); color: var(--ds-text); }
     [data-theme="dark"] button.secondary { background: rgba(255, 255, 255, 0.05); }
@@ -324,7 +230,6 @@
     button.ghost { background: transparent; color: var(--ds-text-subtle); }
     button.ghost:hover { color: var(--ds-background-danger-bold); }
 
-    /* Inputs */
     input.hours-input { width: 80px; text-align: right; padding: 6px 8px; border: 1px solid transparent; background: var(--ds-background-input); color: var(--ds-text); border-radius: 3px; }
     input.hours-input:focus { background: var(--ds-surface); border-color: var(--ds-border-focused); outline: none; }
     .estimation-row { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; border-top: 1px solid var(--ds-border); }
@@ -342,10 +247,10 @@
     /* Print Styles */
     @media print {
       body { background: white; color: black; padding: 0; }
-      [data-theme="dark"] { --ds-text: black; --ds-text-subtle: #666; --ds-border: #ccc; } /* Force light vars for print */
+      [data-theme="dark"] { --ds-text: black; --ds-text-subtle: #666; --ds-border: #ccc; } 
       
       header { position: static; box-shadow: none; border-bottom: 2px solid #000; background: white; }
-      .header-actions { display: none; } /* Hide dark mode toggle on print */
+      .header-actions { display: none; } /* Hide buttons on print */
       
       .client-input-group label { display: block; color: #000; }
       .client-name-input { border: none; padding: 0; text-align: right; font-weight: bold; width: auto; color: #000; }
@@ -356,6 +261,11 @@
       .section-card { box-shadow: none; border: 1px solid #ccc; margin-bottom: 20px; page-break-inside: avoid; background: white; }
       .section-disabled, .task-item.excluded { display: none; }
       
+      /* HIDE SECTION NUMBERS (BADGES) ON PRINT */
+      .section-badge { display: none !important; }
+      .section-header { justify-content: flex-start; }
+      .section-title { margin-left: 0; font-size: 14px; text-transform: uppercase; }
+
       input, select, textarea { border: none; background: transparent; resize: none; appearance: none; padding: 0; color: black; }
       
       .btn-add-row, .btn-remove-row { display: none; }
@@ -375,6 +285,7 @@
 <header>
   <div class="header-content">
     <div class="header-left-group">
+      <img src="https://images.seeklogo.com/logo-png/32/1/atlassian-logo-png_seeklogo-326273.png" alt="Atlassian Logo" class="atlassian-logo">
       <div class="header-titles">
         <h1>Implementation Estimation</h1>
         <p style="margin: 4px 0 0; font-size: 14px; color: var(--ds-text-subtle);">Scope & License Planner</p>
@@ -395,7 +306,6 @@
 </header>
 
 <div class="app-container" id="main-container">
-  
   <main>
     <form id="calc-form" class="sections-wrapper">
 
@@ -677,9 +587,7 @@
 
       <div class="section-card" id="sec-license">
         <div class="section-header" style="background-color: var(--ds-surface-sunken); border-bottom: 2px solid var(--ds-border-focused);">
-          <div class="header-left">
-            <span class="section-title" style="color: var(--ds-link);">License Planning</span>
-          </div>
+          <div class="header-left"><span class="section-title" style="color: var(--ds-link);">License Planning</span></div>
           <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-license"><span class="slider"></span></label>
         </div>
         <div class="section-body">
@@ -702,7 +610,6 @@
           <div class="license-summary-box">
             <div class="license-summary-title">License Seat Summary</div>
             <div class="license-summary-grid" id="license-seat-summary"></div>
-            
             <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--ds-border);">
                 <div class="license-summary-title">License Cost Summary</div>
                 <div class="license-summary-grid" id="license-cost-summary"></div>
@@ -713,9 +620,7 @@
 
       <div class="section-card" id="sec-comments">
         <div class="section-header">
-          <div class="header-left">
-            <span class="section-title">Scope Assumptions & Comments</span>
-          </div>
+          <div class="header-left"><span class="section-title">Scope Assumptions & Comments</span></div>
           <label class="switch"><input type="checkbox" class="section-toggle" checked data-target="sec-comments"><span class="slider"></span></label>
         </div>
         <div class="section-body">
@@ -748,7 +653,7 @@
         </div>
         
         <div id="service-cost-group">
-            <div class="rate-row" style="margin-bottom:12px; display: flex; justify-content: space-between; align-items: center;">
+            <div class="summary-row" style="margin-bottom:12px; align-items: center;">
               <span class="summary-label" style="font-size:12px;">Hourly Rate</span>
               <input type="number" id="hourly-rate" value="100" style="width: 70px; text-align:right; border:1px solid var(--ds-border); background: var(--ds-background-input); color: var(--ds-text); border-radius:3px; padding:2px 4px; font-size:12px;">
             </div>
@@ -787,7 +692,7 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'atlassian_estimate_final_v10_dark';
+  const STORAGE_KEY = 'atlassian_estimate_final_v12_png';
   
   const PRODUCTS = [
     "Jira Software",
@@ -1088,7 +993,8 @@
           if (!card) return;
 
           const secToggle = card.querySelector('.section-toggle');
-          secToggle.checked = data.active;
+          if (secToggle) secToggle.checked = data.active;
+          
           if (!data.active) {
              card.classList.add('section-disabled');
              card.querySelector('.section-body').classList.add('section-body-disabled');
